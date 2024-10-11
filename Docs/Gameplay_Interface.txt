@@ -1,0 +1,99 @@
+
+# **5. Gameplay Interface**
+
+The **gameplay interface** in **EvolveSim** is designed to provide players with clear, accessible information while allowing them to interact seamlessly with the complex simulation. The interface is split between the editor, where players create and modify their species, and the simulation environment, where players observe and influence their species' behavior. Both the **creation stage** (in the editor) and the **gameplay stage** (during active simulation) have distinct user interface (UI) elements tailored to each mode’s specific needs.
+
+---
+
+## **5.1 Main Menu Design**
+
+Before entering any of the game modes, players are greeted with a clean and modern **Main Menu** that offers access to the game’s core features and modes. The layout is intuitive, providing easy navigation to all game options.
+
+### **Main Menu Sections**:
+
+- **Start Game**: Allows the player to select a game mode (Campaign, Survival, Creative, Competitive, Cooperative).
+- **Load Game**: Provides access to saved games tied to the player’s account (linked to a cloud-based save system for persistence across devices).
+- **Editor**: Direct access to the species editor for creating new species or modifying existing ones.
+- **Settings**: Access to game options such as graphics settings, audio levels, control customization, and user preferences.
+- **Leaderboard** (Optional for competitive modes): Displays global or friend-based rankings for competitive matches, survival times, or other achievements.
+
+---
+
+## **5.2 Game Mode Selection Interface**
+
+When selecting a game mode (Campaign, Survival, Creative, etc.), players are presented with a **Mode Selection Screen** that provides detailed information about the selected mode, including objectives, challenges, and customization options.
+
+### **Mode Selection Features**:
+
+- **Game Mode Description**: A brief summary of the selected mode’s gameplay mechanics and objectives.
+- **Customization Options**: For modes like Custom Match, players can adjust parameters like game length, resource availability, enemy AI difficulty, and environmental hazards.
+- **Pre-Made Species Selection**: Players can choose to use pre-built species from their library or create a new one before starting the game.
+- **Difficulty Level**: Allows players to choose the difficulty, which influences resource abundance, hazard severity, and enemy behavior.
+
+---
+
+## **5.3 Editor UI During Creation Stage**
+
+The **species editor** is the hub for player creativity, where they design, customize, and assign behaviors to their species. The interface is designed to offer flexibility and depth without overwhelming the player.
+
+### **5.3.1 Editor Layout**
+
+- **Main Canvas Area**: The primary working area where players place, connect, and manipulate cells. It supports zoom and pan functions for detailed editing.
+- **Tool Palette**: A toolbar with various tools such as:
+   - **Cell Placement Tool**: Allows players to select and place cells on the canvas.
+   - **Selection Tool**: For selecting, moving, and rotating cells.
+   - **Connection Tool**: For manually linking cells to create functional or structural bonds.
+
+- **Cell Library**: Displays all available cell types, allowing players to browse and select the ones they want to use in their species design.
+- **Attributes Panel**: Provides detailed information on each selected cell, allowing players to adjust attributes such as health, speed, and energy consumption.
+- **Behavior Assignment Panel**: A separate section for assigning behaviors to cells, including movement, attack, and resource-gathering behaviors.
+
+---
+
+## **5.4 Simulation UI During Gameplay Stage**
+
+Once the player has deployed their species into the environment, the **simulation UI** provides real-time feedback and control over the gameplay.
+
+### **5.4.1 Simulation Screen Layout**
+
+- **Top Bar**: Displays essential information such as the player's remaining resources, the health of the species, and the current stage of evolution.
+- **Minimap**: A small overview of the environment, showing the player's species, resource nodes, enemy species, and hazards.
+- **Status Panel**: Displays detailed information about the selected cells or groups of cells, including health, energy, and behaviors.
+
+---
+
+## **5.5 Feedback Systems**
+
+Feedback systems are an essential part of the **EvolveSim** interface, providing the player with immediate and clear responses to in-game events.
+
+### **5.5.1 Visual Feedback**
+
+- **Health Bars**: Indicate the health of individual cells or the entire species, changing color from green to red as health decreases.
+- **Energy Indicators**: Cells with low energy emit visual cues, such as dimming or slowing down, alerting the player to potential resource shortages.
+- **Evolutionary Progress**: The UI highlights significant evolutionary changes, using glowing effects or animations to show when a cell has mutated or evolved.
+
+---
+
+## **5.6 Audio Feedback**
+
+In addition to visual feedback, **EvolveSim** uses subtle audio cues to keep the player informed without overwhelming the gameplay experience.
+
+- **Resource Collection Sounds**: When cells gather resources, a soft sound indicates successful collection.
+- **Combat Sounds**: Distinct sounds signal when a cell engages in combat or is attacked by an enemy species.
+- **Evolution Alerts**: A specific sound plays when a species undergoes a major evolutionary change, drawing the player's attention to the event.
+
+---
+
+## **5.7 Customization and Settings**
+
+Players have the option to customize their gameplay experience through the **Settings Menu**, where they can adjust various aspects of the interface.
+
+- **Interface Scaling**: Adjust the size of UI elements for accessibility on different screen sizes or personal preference.
+- **Colorblind Mode**: A colorblind mode adjusts the color scheme to ensure visibility for players with color vision deficiencies.
+- **Audio Settings**: Allows players to control the volume of music, sound effects, and audio cues independently.
+
+---
+
+## **Conclusion**
+
+The **EvolveSim** gameplay interface is designed to be intuitive, accessible, and responsive. It provides players with the tools and feedback necessary to manage their species effectively while immersing them in the simulation. From the editor stage to the active simulation, the interface supports player creativity and strategic decision-making, ensuring a smooth and engaging experience.

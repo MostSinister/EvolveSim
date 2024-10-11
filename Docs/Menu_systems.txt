@@ -1,0 +1,107 @@
+## **
+**9.1** Menu Systems**
+
+The menu systems in **EvolveSim** are designed to be clear, user-friendly, and provide quick access to the game's core features. Whether players are setting up a new match, customizing their settings, or selecting game modes, the menu layout ensures an efficient and enjoyable experience.
+
+### **
+**9.1**.1 Main Menu Layout**
+
+The **Main Menu** is the player’s entry point to **EvolveSim** and provides access to key features such as game modes, settings, and progress tracking. The design prioritizes a clean and modern interface with intuitive navigation.
+
+#### **a. Menu Sections**:
+
+- **Start Game**: Launches the game mode selection interface, allowing players to choose between Campaign, Survival, Creative, Competitive, Cooperative, or Custom Matches. - **Load Game**: Provides a list of saved games, with options to resume any previous single-player matches or cooperative sessions. - **Species Editor**: Direct access to the species editor, where players can create new species or modify existing ones. - **Multiplayer Lobby**: Opens the matchmaking interface, allowing players to join multiplayer games or create custom matches. - **Progress and Achievements**: A section that tracks player progression, level, and achievements, with detailed statistics on player performance across game modes.
+
+#### **b. Menu Navigation**: - **Hotkeys**: Frequently used menu options can be quickly accessed using hotkeys (e.g., pressing “S” for Start Game or “L” for Load Game). - **Hover Effects and Tooltips**: Hovering over any menu item reveals tooltips that describe the function of each option, offering quick guidance for new players.
+
+---
+
+### **
+**9.1**.2 Game Mode Selection Interface**
+
+The **Game Mode Selection Interface** is presented after the player selects “Start Game” from the Main Menu. It provides detailed descriptions and options for each available game mode, ensuring players can make informed decisions about their gameplay experience.
+
+#### **a. Mode Descriptions**: Each game mode has a brief description that outlines its objectives, typical gameplay mechanics, and any unique features or challenges. For example, Campaign Mode offers structured missions, while Survival Mode focuses on endurance in a dynamic environment.
+
+#### **b. Difficulty and Customization Options**: For game modes that offer variable difficulty settings, players can select from a range of difficulties (e.g., Easy, Normal, Hard). In Custom Matches, players have the ability to modify specific parameters such as:
+
+- **Resource Availability**: Adjust how abundant or scarce resources are in the environment. - **Hazards**: Enable or disable environmental hazards like acid pools or storms. - **Enemy AI Difficulty**: Control the aggression and intelligence of AI opponents. - **Game Length**: Set the match duration, from quick skirmishes to extended sessions.
+
+#### **c. Multiplayer Matchmaking Integration**: In multiplayer modes, this interface includes matchmaking options such as quick match, ranked match, or custom game creation. It displays relevant game details, including player count, team setups, and whether AI enemies are enabled.
+
+---
+
+### **
+**9.1**.3 Settings and Customization Options**
+
+The **Settings Menu** is comprehensive, offering players full control over the game’s visual, auditory, and gameplay options. Customization features are designed to allow players to tailor the game to their preferences and optimize performance for different hardware.
+
+#### **a. Graphics Settings**: Players can adjust visual quality settings to optimize performance or enhance visuals based on their system specifications.
+
+- **Resolution**: Adjust screen resolution and aspect ratio to match the player’s monitor. - **Texture Quality**: Control texture resolution, from low-quality for performance to ultra-high for enhanced detail. - **Effects**: Enable or disable effects like shadows, particle effects, and anti-aliasing. - **Full-Screen vs. Windowed Mode**: Toggle between full-screen, windowed, or borderless window modes.
+
+#### **b. Audio Settings**: Allows players to adjust sound levels and customize the audio experience.
+
+- **Master Volume**: Adjust the overall volume of the game. - **Individual Sound Channels**: Control the volume of specific sound categories (e.g., music, sound effects, ambient sounds, voice chat). - **Audio Output**: Select the audio output device (e.g., speakers, headphones).
+
+#### **c. Control Settings**: Offers players the ability to customize their input devices, keybindings, and control schemes.
+
+- **Keybindings**: Players can remap keys for all in-game actions, from movement and interaction to species control commands. - **Controller Support**: Full support for gamepads, including customizable button mappings. - **Mouse Sensitivity**: Adjust the sensitivity for mouse controls, especially important for precise actions in the editor and during gameplay.
+
+#### **d. Gameplay Customization**: Players can tweak specific gameplay settings, such as difficulty modifiers, unit behavior settings, and resource management preferences.
+
+- **Auto-Save Frequency**: Set the frequency for automatic game saves. - **UI Customization**: Toggle UI elements on and off, or adjust the size of key components for better readability.
+
+---
+
+## **
+**9.2** In-Game Interface**
+
+The in-game interface ensures that players have access to all the necessary information and controls while maintaining visual clarity. The UI is designed to be adaptive, changing based on the current game mode and player needs.
+
+### **
+**9.2**.1 HUD Elements**
+
+The **Heads-Up Display (HUD)** offers real-time information on resources, species status, and environmental conditions. The HUD is customizable to reduce screen clutter, allowing players to focus on essential data.
+
+#### **a. Resource Tracker**: A bar at the top of the screen shows the player’s available resources (e.g., energy, food, materials) and any resource caps or production rates.
+
+- **Resource Icons**: Simple icons are used to represent each resource type, with tooltips available for detailed information. - **Alert System**: Flashing or color-coded icons indicate critical resource shortages or overproduction.
+
+#### **b. Species Health and Status**: Real-time information on the player’s species health, energy, and behavior states is displayed either as a side panel or overlaid on the playing field.
+
+- **Health Bars**: Health indicators for each species group or critical cells, with color changes based on damage levels. - **Energy Meters**: Tracks the energy levels of key cells or species-wide energy reserves. - **Behavior Indicators**: Icons or small visual indicators show the current behavior or mode of the player’s species, such as offensive, defensive, or passive.
+
+#### **c. Minimap**: The **Minimap** offers a top-down view of the playing field, showing the location of resources, species, and environmental hazards.
+
+- **Icons and Markers**: Resource locations, enemy species, and hazards are clearly marked, allowing players to strategize their movements and prioritize objectives. - **Zoom and Pan**: Players can zoom in or out on the minimap and pan around to view different parts of the environment.
+
+---
+
+### **
+**9.2**.2 Notifications and Alerts**
+
+Notifications and alerts keep players informed of important events, such as environmental changes, resource depletion, or enemy activity. These alerts are designed to be non-intrusive, ensuring that players can respond quickly without breaking immersion.
+
+#### **a. Event Alerts**: Pop-up notifications provide instant feedback on critical in-game events, such as:
+
+- **Resource Shortage**: An alert when resources are critically low or depleted. - **Cell Damage**: Notifications when key cells or species groups are under attack or taking damage. - **Hazard Warnings**: Warnings about approaching environmental hazards, such as storms or acid rain.
+
+#### **b. Evolutionary Notifications**: When a species evolves or mutates, players receive visual and audio alerts that highlight the new traits or changes.
+
+- **Mutation Alerts**: Indicates when a significant mutation occurs, offering players the option to view the mutation’s impact in real-time. - **Evolution Points**: Alerts players when they have accumulated enough evolution points to trigger new mutations or behaviors.
+
+#### **c. Customizable Alerts**: Players can customize which notifications appear on the screen and the format (e.g., text, audio, or visual effects). This allows players to prioritize certain alerts over others, depending on their gameplay style.
+
+---
+
+### **
+**9.2**.3 Control and Navigation Schemes**
+
+The **control and navigation schemes** in **EvolveSim** are designed to provide players with flexible, intuitive ways to manage their species and interact with the environment.
+
+#### **a. Context-Sensitive Menus**: Menus adapt based on the player’s current actions. For example, selecting a group of cells opens a radial menu with options specific to those cells, such as evolving, attacking, or gathering resources.
+
+#### **b. Species Command Interface**: The **Species Command Interface** allows players to issue real-time commands to their species, including movement, resource gathering, or defense.
+
+- **Quick Command Buttons**: Players can issue common commands with a single click, such as "Gather All Resources" or "Retreat to Safe Zone." - **Drag-and-Drop Behavior Assignments**: For more detailed control, players can drag and drop behaviors
