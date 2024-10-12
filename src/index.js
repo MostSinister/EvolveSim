@@ -1,8 +1,14 @@
-// src/index.js
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import app from './app';
+import App from './app'; // Ensure the App component is correctly imported
+import './index.css'; // Ensure you are importing the CSS for Tailwind
 
-// Render the App component to the DOM
-const root = createRoot(document.getElementById('root'));
-root.render(<app />);
+// Ensure the root element exists in your HTML file
+const rootElement = document.getElementById('root');
+
+if (rootElement) {
+  const root = createRoot(rootElement);
+  root.render(<App />);
+} else {
+  console.error('Root element not found');
+}
