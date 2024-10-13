@@ -26,7 +26,7 @@ const SidebarItems = ({ isCollapsed, activeTab, setActiveTab, isDarkMode }) => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="sidebar-items">
+      <Droppable droppableId="sidebar-items" isDropDisabled={isCollapsed}>
         {(provided) => (
           <nav
             className="mt-2 flex-1 overflow-y-auto overflow-x-hidden space-y-1"
@@ -34,17 +34,17 @@ const SidebarItems = ({ isCollapsed, activeTab, setActiveTab, isDarkMode }) => {
             ref={provided.innerRef}
           >
             {menuItems.map((item, index) => (
-              <Draggable key={item.id} draggableId={item.id} index={index}>
+              <Draggable key={item.id} draggableId={item.id} index={index} isDragDisabled={isCollapsed}>
                 {(provided) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.draggableProps}
-                    {...provided.dragHandleProps}
+                    {...(isCollapsed ? {} : provided.dragHandleProps)}
                     className="group"
                   >
                     <Link to={item.path} onClick={() => setActiveTab(item.id)}>
                       <button
-                        className={`flex items-center p-2 w-full text-left transition-all duration-300 ${
+                        className={`flex items-center p-2 w-full text-left transition-all duration-500 ease-in-out ${
                           activeTab === item.id
                             ? isDarkMode
                               ? 'bg-gray-700 text-blue-400'
@@ -54,7 +54,7 @@ const SidebarItems = ({ isCollapsed, activeTab, setActiveTab, isDarkMode }) => {
                             : 'text-gray-600 hover:bg-gray-100'
                         }`}
                       >
-                        <div className={`ml-1 ${isCollapsed ? 'mx-auto' : ''}`}>
+                        <div className="flex items-center ml-2">
                           <item.icon
                             className={`h-6 w-6 ${
                               activeTab === item.id
@@ -65,12 +65,14 @@ const SidebarItems = ({ isCollapsed, activeTab, setActiveTab, isDarkMode }) => {
                             }`}
                           />
                         </div>
+                        <span className={`ml-6 text-sm ${isCollapsed ? 'hidden' : 'block'}`}>
+                          {item.label}
+                        </span>
                         {!isCollapsed && (
-                          <span className="ml-2 text-sm">{item.label}</span>
+                          <div className="ml-auto mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out">
+                            <GripVertical className="h-4 w-4 text-gray-500" />
+                          </div>
                         )}
-                        <div className="ml-auto mr-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <GripVertical className="h-4 w-4 text-gray-500" />
-                        </div>
                       </button>
                     </Link>
                   </div>
