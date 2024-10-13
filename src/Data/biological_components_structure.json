@@ -1,0 +1,35 @@
+{
+    "Cells": {
+        "Cell Type Name": "string",
+        "Subcategory": "string",
+        "Sequence": "string",
+        "Health": "integer",
+        "Energy Cost": "integer",
+        "Size": "string",
+        "Armor": "integer"
+    },
+    "Neurons": {
+        "Neuron Type Name": "string",
+        "Subcategory": "string",
+        "Sequence": "integer",
+        "Behavior": "string",
+        "Receptor Slots": "integer",
+        "Output Slots": "integer"
+    },
+    "Synapses": {
+        "Synapse Type Name": "string",
+        "Subcategory": "string",
+        "Sequence": "integer",
+        "Rules (Math Expressions)": "string",
+        "Expected Attributes": "string",
+        "Condition Expression": "string",
+        "Value": "float"
+    },
+    "Genes": {
+        "Gene Type Name": "string",
+        "Subcategory": "string",
+        "Sequence": "string",
+        "Bonus Type": "string",
+        "Cell Bonus/Cost (Integer)": "integer"
+    }
+}

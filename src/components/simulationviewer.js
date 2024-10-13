@@ -1,10 +1,10 @@
 // src/components/simulationviewer.js
 import React, { useState } from 'react';
-import SimulationControls from './simulationcontrols'; // Controls for simulation
-import ZoomControl from './zoomcontrol'; // Zoom control component
-import DesignerPanel from './designerpanel'; // Panel for designing organisms
-import ResultsPanel from './resultspanel'; // Panel for displaying results
-import ResizablePanels from './resizablepanels'; // Component for resizable panels
+import SimulationControls from './simulationcontrols'; // Corrected import for SimulationControls
+import ZoomControl from './zoomcontrol'; // Corrected import for ZoomControl
+import DesignerPanel from './designerpanel';
+import ResultsPanel from './resultspanel';
+import ResizablePanels from './resizablepanels';
 
 const SimulationViewer = ({ isDarkMode }) => {
   // State to manage play/pause status
@@ -53,8 +53,8 @@ const SimulationViewer = ({ isDarkMode }) => {
 
   return (
     <div className={`flex flex-col h-full ${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-100 text-gray-800'}`}>
-      {/* Top Bar */}
-      <div className={`flex justify-between items-center p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} shadow-md`}>
+      {/* Simulation Controls */}
+      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10">
         <SimulationControls
           isPlaying={isPlaying}
           togglePlay={togglePlay}
@@ -63,6 +63,10 @@ const SimulationViewer = ({ isDarkMode }) => {
           resetSimulation={resetSimulation}
           isDarkMode={isDarkMode}
         />
+      </div>
+
+      {/* Zoom Controls */}
+      <div className="absolute top-4 right-4 z-10">
         <ZoomControl
           zoomLevel={zoomLevel}
           setZoomLevel={setZoomLevel}

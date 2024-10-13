@@ -1,0 +1,142 @@
+{
+    "Cells": [
+        {
+            "Cell Type Name": "Base Cell A",
+            "Subcategory": "Base Cells",
+            "Sequence": "AAA",
+            "Health": 10,
+            "Energy Cost": 5,
+            "Size": "Small",
+            "Armor": 0
+        },
+        {
+            "Cell Type Name": "Base Cell B",
+            "Subcategory": "Base Cells",
+            "Sequence": "AAB",
+            "Health": 5,
+            "Energy Cost": 5,
+            "Size": "Small",
+            "Armor": 0
+        },
+        {
+            "Cell Type Name": "Energy Cell A",
+            "Subcategory": "Energy Cells",
+            "Sequence": "ABB",
+            "Health": 10,
+            "Energy Cost": 5,
+            "Size": "Large",
+            "Armor": 0
+        },
+        {
+            "Cell Type Name": "Energy Cell B",
+            "Subcategory": "Energy Cells",
+            "Sequence": "ABA",
+            "Health": 10,
+            "Energy Cost": 5,
+            "Size": "Medium",
+            "Armor": 1
+        }
+    ],
+    "Neurons": [
+        {
+            "Neuron Type Name": "Combat Neuron A",
+            "Subcategory": "Combat Neurons",
+            "Sequence": 1,
+            "Behavior": "Aggressive",
+            "Receptor Slots": 3,
+            "Output Slots": 2
+        },
+        {
+            "Neuron Type Name": "Combat Neuron B",
+            "Subcategory": "Combat Neurons",
+            "Sequence": 2,
+            "Behavior": "Defensive",
+            "Receptor Slots": 2,
+            "Output Slots": 3
+        },
+        {
+            "Neuron Type Name": "Sensory Neuron A",
+            "Subcategory": "Sensory Neurons",
+            "Sequence": 3,
+            "Behavior": "Sensitive",
+            "Receptor Slots": 4,
+            "Output Slots": 1
+        },
+        {
+            "Neuron Type Name": "Sensory Neuron B",
+            "Subcategory": "Sensory Neurons",
+            "Sequence": 4,
+            "Behavior": "Adaptive",
+            "Receptor Slots": 3,
+            "Output Slots": 2
+        }
+    ],
+    "Synapses": [
+        {
+            "Synapse Type Name": "Excitatory Synapse A",
+            "Subcategory": "Excitatory Synapses",
+            "Sequence": 1,
+            "Rules (Math Expressions)": "Amplify(signal)",
+            "Expected Attributes": "Signal Intensity",
+            "Condition Expression": "Greater Than",
+            "Value": 0.5
+        },
+        {
+            "Synapse Type Name": "Excitatory Synapse B",
+            "Subcategory": "Excitatory Synapses",
+            "Sequence": 2,
+            "Rules (Math Expressions)": "Multiply(signal, 1.5)",
+            "Expected Attributes": "Adaptability",
+            "Condition Expression": "Equals",
+            "Value": 1.0
+        },
+        {
+            "Synapse Type Name": "Inhibitory Synapse A",
+            "Subcategory": "Inhibitory Synapses",
+            "Sequence": 3,
+            "Rules (Math Expressions)": "Dampen(signal)",
+            "Expected Attributes": "Signal Blocking",
+            "Condition Expression": "Threshold",
+            "Value": 0.3
+        },
+        {
+            "Synapse Type Name": "Inhibitory Synapse B",
+            "Subcategory": "Inhibitory Synapses",
+            "Sequence": 4,
+            "Rules (Math Expressions)": "Reduce(signal, 0.5)",
+            "Expected Attributes": "Receptor Sensitivity",
+            "Condition Expression": "Greater Than",
+            "Value": 0.2
+        }
+    ],
+    "Genes": [
+        {
+            "Gene Type Name": "Regulation Gene A",
+            "Subcategory": "Regulation Genes",
+            "Sequence": "A",
+            "Bonus Type": "Health",
+            "Cell Bonus/Cost (Integer)": 5
+        },
+        {
+            "Gene Type Name": "Regulation Gene B",
+            "Subcategory": "Regulation Genes",
+            "Sequence": "B",
+            "Bonus Type": "Defense",
+            "Cell Bonus/Cost (Integer)": -3
+        },
+        {
+            "Gene Type Name": "Mutation Gene A",
+            "Subcategory": "Mutation Genes",
+            "Sequence": "C",
+            "Bonus Type": "Energy",
+            "Cell Bonus/Cost (Integer)": 2
+        },
+        {
+            "Gene Type Name": "Mutation Gene B",
+            "Subcategory": "Mutation Genes",
+            "Sequence": "D",
+            "Bonus Type": "Toxic Resistance",
+            "Cell Bonus/Cost (Integer)": -1
+        }
+    ]
+}
