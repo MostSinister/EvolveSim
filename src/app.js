@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
-import SidebarLayout from './components/sidebar/sidebarlayout'; // Updated import path for Sidebar
-import SimulationViewer from './components/simulationviewer';
-import Dashboard from './components/Dashboard';
-import Results from './components/Results';
-import Settings from './components/Settings';
-import Save from './components/Save';
-import Logs from './components/Logs';
-import Organism from './components/Organism';
+import SidebarLayout from './components/sidebar/sidebarlayout'; // Sidebar layout component
+import SimulationViewer from './components/simulationviewer'; // Simulation viewer component
+import Dashboard from './components/Dashboard'; // Dashboard component
+import Results from './components/Results'; // Results component
+import Settings from './components/Settings'; // Settings component
+import Save from './components/Save'; // Save component
+import Logs from './components/Logs'; // Logs component
+import Organism from './components/Organism'; // Organism component
 
 const App = () => {
+  // State to manage the active tab
   const [activeTab, setActiveTab] = useState('dashboard');
+  // State to manage sidebar collapse
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
+  // State to manage dark mode
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // Function to render correct content
+  // Function to toggle dark mode
+  const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
+
+  // Function to render the correct content based on the active tab
   const renderContent = () => {
     switch (activeTab) {
       case 'dashboard':
@@ -21,15 +27,15 @@ const App = () => {
       case 'simulation':
         return <SimulationViewer isDarkMode={isDarkMode} />;
       case 'organism':
-        return <Organism />;
+        return <Organism isDarkMode={isDarkMode} />;
       case 'results':
-        return <Results />;
+        return <Results isDarkMode={isDarkMode} />;
       case 'settings':
-        return <Settings />;
+        return <Settings isDarkMode={isDarkMode} />;
       case 'save':
-        return <Save />;
+        return <Save isDarkMode={isDarkMode} />;
       case 'logs':
-        return <Logs />;
+        return <Logs isDarkMode={isDarkMode} />;
       default:
         return <Dashboard isDarkMode={isDarkMode} />;
     }
@@ -43,7 +49,7 @@ const App = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         isDarkMode={isDarkMode}
-        toggleDarkMode={() => setIsDarkMode(!isDarkMode)}
+        toggleDarkMode={toggleDarkMode} // Pass the toggleDarkMode function
       />
       <main className={`flex-1 flex flex-col overflow-hidden ${activeTab === 'simulation' ? 'p-0' : 'p-4'}`}>
         {renderContent()} {/* Render the correct tab content */}

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Home, Edit, Dna, BarChart2, Save, Settings, FileText } from 'lucide-react';
 
-const SidebarItems = ({ isCollapsed, activeTab, setActiveTab }) => {
+const SidebarItems = ({ isCollapsed, activeTab, setActiveTab, isDarkMode }) => {
   const menuItems = [
     { icon: Home, label: 'Dashboard', id: 'dashboard' },
     { icon: Edit, label: 'Simulation', id: 'simulation' },
@@ -21,12 +21,22 @@ const SidebarItems = ({ isCollapsed, activeTab, setActiveTab }) => {
           onClick={() => setActiveTab(item.id)}
           className={`flex items-center p-2 w-full text-left transition-all duration-300 ${
             activeTab === item.id
-              ? 'bg-gray-200 text-blue-600'
+              ? isDarkMode
+                ? 'bg-gray-700 text-blue-400'
+                : 'bg-gray-200 text-blue-600'
+              : isDarkMode
+              ? 'text-gray-300 hover:bg-gray-700'
               : 'text-gray-600 hover:bg-gray-100'
           }`}
         >
           <div className="ml-4">
-            <item.icon className="h-6 w-6" />
+            <item.icon className={`h-6 w-6 ${
+              activeTab === item.id
+                ? 'text-blue-500'
+                : isDarkMode
+                ? 'text-gray-400'
+                : 'text-gray-500'
+            }`} />
           </div>
           {!isCollapsed && (
             <span className="ml-4 text-sm">{item.label}</span>
