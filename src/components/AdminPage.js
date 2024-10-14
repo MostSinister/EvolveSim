@@ -345,7 +345,10 @@ function AdminPage({ isDarkMode }) {
                           type={biologicalStructure[componentType]?.properties[key]?.type === 'integer' ? 'number' : 'text'}
                           value={component[key]}
                           onChange={(e) => handleFieldChange(component.id, key, e.target.value)}
-                          className="w-full bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                          className={`w-full bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 rounded
+                            ${(biologicalStructure[componentType]?.properties[key]?.type === 'integer' || 
+                               biologicalStructure[componentType]?.properties[key]?.type === 'number') 
+                               ? 'text-center' : ''}`}
                           step={biologicalStructure[componentType]?.properties[key]?.type === 'integer' ? 1 : undefined}
                           style={key === 'Sequence' ? { textTransform: 'uppercase' } : {}}
                         />

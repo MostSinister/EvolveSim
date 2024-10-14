@@ -8,7 +8,7 @@ import { fetchCollection } from '../firebaseService'; // Import the fetchCollect
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 const Card = ({ title, value, color, isDarkMode }) => (
-  <div className={`shadow-md rounded-lg p-4 ${isDarkMode ? 'bg-gray-700' : 'bg-white'} h-full flex flex-col justify-center items-center no-select`}>
+  <div className={`shadow-md rounded-lg p-4 ${isDarkMode ? 'bg-gray-700' : 'bg-white'} h-full flex flex-col justify-center items-center no-select transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg`}>
     <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-center`}>{title}</h3>
     <p className={`text-4xl font-bold ${color} text-center`}>{value}</p>
   </div>
@@ -22,16 +22,19 @@ const Dashboard = ({ isDarkMode }) => {
     Neurons: 0,
   });
 
-  const [layout, setLayout] = useState([
-    { i: 'Total Organisms', x: 0, y: 0, w: 2, h: 1 },
-    { i: 'Average Fitness', x: 2, y: 0, w: 2, h: 1 },
-    { i: 'Total Generations', x: 4, y: 0, w: 2, h: 1 },
-    { i: 'Cells', x: 0, y: 1, w: 2, h: 1 },
-    { i: 'Synapses', x: 2, y: 1, w: 2, h: 1 },
-    { i: 'Genes', x: 4, y: 1, w: 2, h: 1 },
-    { i: 'Neurons', x: 0, y: 2, w: 2, h: 1 },
-    { i: 'Simulation Status', x: 2, y: 2, w: 4, h: 1 },
-  ]);
+  const [layout, setLayout] = useState(() => {
+    const savedLayout = localStorage.getItem('dashboardLayout');
+    return savedLayout ? JSON.parse(savedLayout) : [
+      { i: 'Total Organisms', x: 0, y: 0, w: 2, h: 1 },
+      { i: 'Average Fitness', x: 2, y: 0, w: 2, h: 1 },
+      { i: 'Total Generations', x: 4, y: 0, w: 2, h: 1 },
+      { i: 'Cells', x: 0, y: 1, w: 2, h: 1 },
+      { i: 'Synapses', x: 2, y: 1, w: 2, h: 1 },
+      { i: 'Genes', x: 4, y: 1, w: 2, h: 1 },
+      { i: 'Neurons', x: 0, y: 2, w: 2, h: 1 },
+      { i: 'Simulation Status', x: 2, y: 2, w: 4, h: 1 },
+    ];
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,6 +76,7 @@ const Dashboard = ({ isDarkMode }) => {
 
   const onLayoutChange = (newLayout) => {
     setLayout(newLayout);
+    localStorage.setItem('dashboardLayout', JSON.stringify(newLayout));
   };
 
   return (
@@ -96,6 +100,12 @@ const Dashboard = ({ isDarkMode }) => {
           -moz-user-select: none;
           -ms-user-select: none;
           user-select: none;
+        }
+        .react-grid-item {
+          transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .react-grid-item:hover {
+          z-index: 1;
         }
       `}</style>
 
