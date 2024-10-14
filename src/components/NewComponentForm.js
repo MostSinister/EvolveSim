@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Modal from './Modal';
 import fieldOrder from '../fieldOrder';
+import DynamicInput from './DynamicInput';
 
 function NewComponentForm({ componentType, isOpen, onClose, onSave }) {
   const [formData, setFormData] = useState({});
@@ -31,14 +32,11 @@ function NewComponentForm({ componentType, isOpen, onClose, onSave }) {
             <label className="block mb-1 capitalize" htmlFor={key}>
               {key}
             </label>
-            <input
-              type="text"
-              id={key}
-              name={key}
-              value={formData[key] || ''}
+            <DynamicInput
+              componentType={componentType}
+              fieldName={key}
+              value={formData[key]}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              required
             />
           </div>
         ))}

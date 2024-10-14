@@ -10,6 +10,7 @@ import {
   addDoc,
   onSnapshot
 } from 'firebase/firestore';
+import { validateData } from './utils/structureParser';
 
 export const fetchCollection = async (collectionName) => {
   const querySnapshot = await getDocs(collection(db, collectionName));
@@ -21,11 +22,17 @@ export const deleteDocument = async (collectionName, id) => {
 };
 
 export const updateDocument = async (collectionName, id, data) => {
+  if (!validateData(collectionName, data)) {
+    throw new Error('Invalid data structure');
+  }
   const docRef = doc(db, collectionName, id);
   await updateDoc(docRef, data);
 };
 
 export const addDocument = async (collectionName, data) => {
+  if (!validateData(collectionName, data)) {
+    throw new Error('Invalid data structure');
+  }
   const docRef = await addDoc(collection(db, collectionName), data);
   return { id: docRef.id, ...data };
 };

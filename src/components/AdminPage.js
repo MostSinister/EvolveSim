@@ -21,28 +21,29 @@ import {
   addDoc,
 } from 'firebase/firestore';
 import { onSnapshot } from 'firebase/firestore';
+import { getFieldType, getStructure } from '../utils/structureParser';
 
 const formatField = (key, value, componentType) => {
   if (value === null || value === undefined) return value;
+
+  const fieldType = getFieldType(componentType, key);
+  console.log('Field type for', key, ':', fieldType);
 
   const capitalizeWords = (str) => {
     return str.replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
-  switch (key) {
-    case 'Sequence':
-      return value.toUpperCase();
-    case 'Name':
-    case 'Type':
-    case 'Description':
+  switch (fieldType) {
+    case 'string':
       return capitalizeWords(value);
-    case 'Size':
-      return ['Small', 'Medium', 'Large', 'X-Large'].includes(value) ? value : 'Medium';
+    case 'integer':
+      return value === '' ? 0 : Math.floor(Number(value));
+    case 'number':
+      return value === '' ? 0 : Number(value);
+    case 'enum':
+      return value;
     default:
-      if (typeof value === 'number' || !isNaN(value)) {
-        return value === '' ? 0 : Number(value);
-      }
-      return capitalizeWords(value);
+      return value;
   }
 };
 
@@ -61,8 +62,11 @@ function AdminPage({ isDarkMode }) {
   const formatComponents = useCallback((data) => {
     return data.map(component => {
       const formattedComponent = { ...component };
-      for (const field in biologicalStructure[componentType]) {
-        formattedComponent[field] = formatField(field, component[field], componentType);
+      const componentStructure = getStructure()[componentType];
+      if (componentStructure && componentStructure.properties) {
+        for (const field in componentStructure.properties) {
+          formattedComponent[field] = formatField(field, component[field], componentType);
+        }
       }
       return formattedComponent;
     });
@@ -133,7 +137,15 @@ function AdminPage({ isDarkMode }) {
       const updatedComponent = components.find(comp => comp.id === id);
       if (!updatedComponent) return;
 
-      const formattedValue = formatField(field, value, componentType);
+      const fieldType = getFieldType(componentType, field);
+      let formattedValue;
+
+      if (fieldType === 'integer') {
+        formattedValue = value === '' ? 0 : Math.floor(Number(value));
+      } else {
+        formattedValue = formatField(field, value, componentType);
+      }
+
       await updateDocument(componentType, id, { [field]: formattedValue });
     } catch (error) {
       console.error('Error updating field:', error);
@@ -141,7 +153,7 @@ function AdminPage({ isDarkMode }) {
     }
   };
 
-  const orderedFields = Object.keys(biologicalStructure[componentType]) || [];
+  const orderedFields = Object.keys(biologicalStructure[componentType]?.properties || {});
 
   return (
     <div className={`p-4 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'} min-h-screen`}>
@@ -183,22 +195,24 @@ function AdminPage({ isDarkMode }) {
                 >
                   {orderedFields.map((key) => (
                     <td key={key} className="border px-4 py-2">
-                      {key === 'Size' ? (
+                      {biologicalStructure[componentType]?.properties[key]?.type === 'string' &&
+                      key === 'Size' ? (
                         <select
                           value={component[key]}
                           onChange={(e) => handleFieldChange(component.id, key, e.target.value)}
                           className="w-full bg-transparent focus:outline-none"
                         >
-                          {['Small', 'Medium', 'Large', 'X-Large'].map((size) => (
+                          {biologicalStructure[componentType]?.properties[key]?.enum?.map((size) => (
                             <option key={size} value={size}>{size}</option>
                           ))}
                         </select>
                       ) : (
                         <input
-                          type="text"
+                          type={biologicalStructure[componentType]?.properties[key]?.type === 'integer' ? 'number' : 'text'}
                           value={component[key]}
                           onChange={(e) => handleFieldChange(component.id, key, e.target.value)}
                           className="w-full bg-transparent focus:outline-none"
+                          step={biologicalStructure[componentType]?.properties[key]?.type === 'integer' ? 1 : undefined}
                         />
                       )}
                     </td>
