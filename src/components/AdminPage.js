@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { PlusCircle, Trash, Edit3, Copy, Save } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { PlusCircle, Trash, Edit3, Copy, Save, RefreshCw } from 'lucide-react';
 import {
-  fetchCollection,
+  subscribeToCollection,
   deleteDocument,
   updateDocument,
   addDocument,
@@ -11,6 +11,16 @@ import EditComponentForm from './EditComponentForm';
 import biologicalStructure from '../Data/biological_components_structure.json';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { db } from '../firebase';
+import {
+  collection,
+  getDocs,
+  deleteDoc,
+  doc,
+  updateDoc,
+  addDoc,
+} from 'firebase/firestore';
+import { onSnapshot } from 'firebase/firestore';
 
 const formatField = (key, value, componentType) => {
   if (value === null || value === undefined) return value;
@@ -30,7 +40,7 @@ const formatField = (key, value, componentType) => {
       return ['Small', 'Medium', 'Large', 'X-Large'].includes(value) ? value : 'Medium';
     default:
       if (typeof value === 'number' || !isNaN(value)) {
-        return parseInt(value) || 0;
+        return value === '' ? 0 : Number(value);
       }
       return capitalizeWords(value);
   }
@@ -43,47 +53,36 @@ function AdminPage({ isDarkMode }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
-  const [editedComponents, setEditedComponents] = useState({});
 
   const themeClasses = isDarkMode
     ? 'bg-gray-900 text-white hover:bg-gray-800'
     : 'bg-white text-black hover:bg-gray-100';
 
+  const formatComponents = useCallback((data) => {
+    return data.map(component => {
+      const formattedComponent = { ...component };
+      for (const field in biologicalStructure[componentType]) {
+        formattedComponent[field] = formatField(field, component[field], componentType);
+      }
+      return formattedComponent;
+    });
+  }, [componentType]);
+
   useEffect(() => {
     setLoading(true);
-    fetchCollection(componentType)
-      .then((data) => {
-        const formattedData = data.map(component => {
-          const formattedComponent = { ...component };
-          for (const field in biologicalStructure[componentType]) {
-            formattedComponent[field] = formatField(field, component[field], componentType);
-          }
-          return formattedComponent;
-        });
+    const unsubscribe = subscribeToCollection(componentType, (data) => {
+      const formattedData = formatComponents(data);
+      setComponents(formattedData);
+      setLoading(false);
+    });
 
-        setComponents(formattedData);
-        setLoading(false);
-
-        // Resave formatted data
-        formattedData.forEach(async (component) => {
-          try {
-            await updateDocument(componentType, component.id, component);
-          } catch (error) {
-            console.error('Error resaving formatted component:', error);
-          }
-        });
-      })
-      .catch((error) => {
-        console.error('Error fetching components:', error);
-        setLoading(false);
-      });
-  }, [componentType]);
+    return () => unsubscribe();
+  }, [componentType, formatComponents]);
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this component?')) {
       try {
         await deleteDocument(componentType, id);
-        setComponents(components.filter((comp) => comp.id !== id));
         toast.success('Component deleted successfully!');
       } catch (error) {
         console.error('Error deleting component:', error);
@@ -103,17 +102,7 @@ function AdminPage({ isDarkMode }) {
         throw new Error('Invalid document ID');
       }
 
-      const docExists = components.some(comp => comp.id === updatedComponent.id);
-      if (!docExists) {
-        throw new Error(`Document with ID ${updatedComponent.id} does not exist`);
-      }
-
       await updateDocument(componentType, updatedComponent.id, updatedComponent);
-      setComponents(
-        components.map((comp) =>
-          comp.id === updatedComponent.id ? updatedComponent : comp
-        )
-      );
       setIsEditFormOpen(false);
       toast.success('Component updated successfully!');
     } catch (error) {
@@ -125,8 +114,7 @@ function AdminPage({ isDarkMode }) {
   const handleAdd = async (newComponentData) => {
     try {
       const { id, ...dataWithoutId } = newComponentData;
-      const newComponent = await addDocument(componentType, dataWithoutId);
-      setComponents([...components, newComponent]);
+      await addDocument(componentType, dataWithoutId);
       setIsFormOpen(false);
       toast.success('New component added successfully!');
     } catch (error) {
@@ -140,31 +128,16 @@ function AdminPage({ isDarkMode }) {
     await handleAdd(duplicatedComponent);
   };
 
-  const handleFieldChange = (id, field, value) => {
-    const formattedValue = formatField(field, value, componentType);
-    setEditedComponents((prevState) => ({
-      ...prevState,
-      [id]: { ...prevState[id], [field]: formattedValue },
-    }));
-  };
-
-  const saveChanges = async () => {
+  const handleFieldChange = async (id, field, value) => {
     try {
-      for (const id in editedComponents) {
-        const originalComponent = components.find(comp => comp.id === id);
-        const updatedComponent = { ...originalComponent };
-        
-        for (const field in biologicalStructure[componentType]) {
-          updatedComponent[field] = formatField(field, editedComponents[id]?.[field] || originalComponent[field], componentType);
-        }
+      const updatedComponent = components.find(comp => comp.id === id);
+      if (!updatedComponent) return;
 
-        await handleUpdate(updatedComponent);
-      }
-      setEditedComponents({});
-      toast.success('Changes have been successfully saved.');
+      const formattedValue = formatField(field, value, componentType);
+      await updateDocument(componentType, id, { [field]: formattedValue });
     } catch (error) {
-      console.error('Error saving changes:', error);
-      toast.error('Failed to save changes.');
+      console.error('Error updating field:', error);
+      toast.error('Failed to update field.');
     }
   };
 
@@ -212,7 +185,7 @@ function AdminPage({ isDarkMode }) {
                     <td key={key} className="border px-4 py-2">
                       {key === 'Size' ? (
                         <select
-                          value={editedComponents[component.id]?.[key] || component[key]}
+                          value={component[key]}
                           onChange={(e) => handleFieldChange(component.id, key, e.target.value)}
                           className="w-full bg-transparent focus:outline-none"
                         >
@@ -223,7 +196,7 @@ function AdminPage({ isDarkMode }) {
                       ) : (
                         <input
                           type="text"
-                          value={editedComponents[component.id]?.[key] || formatField(key, component[key], componentType)}
+                          value={component[key]}
                           onChange={(e) => handleFieldChange(component.id, key, e.target.value)}
                           className="w-full bg-transparent focus:outline-none"
                         />
@@ -259,14 +232,6 @@ function AdminPage({ isDarkMode }) {
           </table>
         </div>
       )}
-
-      <button
-        onClick={saveChanges}
-        className="fixed bottom-20 right-4 p-3 rounded-full bg-green-600 text-white hover:bg-green-700 shadow-lg"
-        title="Save Changes"
-      >
-        <Save className="w-6 h-6" />
-      </button>
 
       <button
         onClick={() => setIsFormOpen(true)}

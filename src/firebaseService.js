@@ -8,6 +8,7 @@ import {
   doc,
   updateDoc,
   addDoc,
+  onSnapshot
 } from 'firebase/firestore';
 
 export const fetchCollection = async (collectionName) => {
@@ -27,4 +28,12 @@ export const updateDocument = async (collectionName, id, data) => {
 export const addDocument = async (collectionName, data) => {
   const docRef = await addDoc(collection(db, collectionName), data);
   return { id: docRef.id, ...data };
+};
+
+export const subscribeToCollection = (collectionName, callback) => {
+  const collectionRef = collection(db, collectionName);
+  return onSnapshot(collectionRef, (snapshot) => {
+    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    callback(data);
+  });
 };
