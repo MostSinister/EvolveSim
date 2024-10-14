@@ -22,8 +22,15 @@ const convertFieldNames = (data) => {
 };
 
 export const fetchCollection = async (collectionName) => {
-  const querySnapshot = await getDocs(collection(db, collectionName));
-  return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  try {
+    const querySnapshot = await getDocs(collection(db, collectionName));
+    const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    console.log(`Fetched ${data.length} documents from ${collectionName}:`, data);
+    return data;
+  } catch (error) {
+    console.error(`Error fetching collection ${collectionName}:`, error);
+    return [];
+  }
 };
 
 export const deleteDocument = async (collectionName, id) => {
@@ -51,10 +58,14 @@ export const addDocument = async (collectionName, data) => {
 };
 
 export const subscribeToCollection = (collectionName, callback) => {
+  console.log(`Subscribing to collection: ${collectionName}`);
   const collectionRef = collection(db, collectionName);
   return onSnapshot(collectionRef, (snapshot) => {
     const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    console.log(`Received ${data.length} documents from ${collectionName}:`, data);
     callback(data);
+  }, (error) => {
+    console.error(`Error in subscription to ${collectionName}:`, error);
   });
 };
 

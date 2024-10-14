@@ -2,6 +2,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore'; // Import Firestore
 import { getAnalytics } from 'firebase/analytics';
+import { getAuth, setPersistence, browserSessionPersistence } from 'firebase/auth';
 
 // Your web app's Firebase configuration using environment variables
 const firebaseConfig = {
@@ -18,5 +19,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app); // Initialize Firestore
 const analytics = getAnalytics(app);
+const auth = getAuth(app);
 
-export { db }; // Export Firestore instance
+// Set auth persistence to session
+setPersistence(auth, browserSessionPersistence);
+
+export { db, auth }; // Export Firestore and Auth instances
