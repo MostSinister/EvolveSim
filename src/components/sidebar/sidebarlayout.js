@@ -1,12 +1,10 @@
 // SidebarLayout.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react'; // Icons for toggle
 import SidebarItems from './sidebaritems'; // Breakout menu items component
 import UserAvatar from '../UserAvatar';
 
 const SidebarLayout = ({ 
-  isCollapsed, 
-  toggleSidebar, 
   activeTab, 
   setActiveTab, 
   isDarkMode, 
@@ -14,7 +12,20 @@ const SidebarLayout = ({
   user, 
   handleLogout 
 }) => {
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    const savedState = localStorage.getItem('sidebarCollapsed');
+    return savedState !== null ? JSON.parse(savedState) : false;
+  });
+
   const sidebarWidth = isCollapsed ? '60px' : '256px'; // Adjusted the collapsed panel width
+
+  useEffect(() => {
+    localStorage.setItem('sidebarCollapsed', JSON.stringify(isCollapsed));
+  }, [isCollapsed]);
+
+  const handleToggleSidebar = () => {
+    setIsCollapsed(prevState => !prevState);
+  };
 
   return (
     <aside
@@ -35,7 +46,7 @@ const SidebarLayout = ({
           EvolveSim
         </h1>
         <button
-          onClick={toggleSidebar}
+          onClick={handleToggleSidebar}
           className={`p-2 rounded-full transition-transform transform hover:scale-105 absolute right-4 top-1/2 -translate-y-1/2 ${
             isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
           }`}
