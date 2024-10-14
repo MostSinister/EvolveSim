@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { PlusCircle, Trash, Edit3, Copy, Save, RefreshCw } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { PlusCircle, Trash, Edit3, Copy, Save, RefreshCw, Download, Upload } from 'lucide-react';
 import {
   subscribeToCollection,
   deleteDocument,
   updateDocument,
   addDocument,
+  exportCollectionToJSON,
+  importCollectionFromJSON,
 } from '../firebaseService';
 import NewComponentForm from './NewComponentForm';
 import EditComponentForm from './EditComponentForm';
@@ -56,6 +58,8 @@ function AdminPage({ isDarkMode }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
+  const [isImporting, setIsImporting] = useState(false);
+  const importInputRef = useRef(null);
 
   const themeClasses = isDarkMode
     ? 'bg-gray-900 text-white hover:bg-gray-800'
@@ -162,6 +166,29 @@ function AdminPage({ isDarkMode }) {
 
   const orderedFields = Object.keys(biologicalStructure[componentType]?.properties || {});
 
+  const handleExport = () => {
+    exportCollectionToJSON(componentType);
+  };
+
+  const handleImport = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setIsImporting(true);
+      try {
+        await importCollectionFromJSON(componentType, file);
+        toast.success('Import completed successfully!');
+      } catch (error) {
+        console.error('Error importing data:', error);
+        toast.error('Failed to import data.');
+      } finally {
+        setIsImporting(false);
+        if (importInputRef.current) {
+          importInputRef.current.value = '';
+        }
+      }
+    }
+  };
+
   return (
     <div className={`p-4 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'} min-h-screen`}>
       <ToastContainer />
@@ -254,6 +281,28 @@ function AdminPage({ isDarkMode }) {
           </table>
         </div>
       )}
+
+      <div className="fixed bottom-20 right-4 flex flex-col space-y-2">
+        <button
+          onClick={handleExport}
+          className="p-3 rounded-full bg-green-600 text-white hover:bg-green-700 shadow-lg"
+          title="Export JSON"
+          disabled={isImporting}
+        >
+          <Download className="w-6 h-6" />
+        </button>
+        <label className={`p-3 rounded-full ${isImporting ? 'bg-gray-400 cursor-not-allowed' : 'bg-purple-600 hover:bg-purple-700 cursor-pointer'} text-white shadow-lg`} title="Import JSON">
+          <Upload className="w-6 h-6" />
+          <input
+            type="file"
+            accept=".json"
+            onChange={handleImport}
+            className="hidden"
+            disabled={isImporting}
+            ref={importInputRef}
+          />
+        </label>
+      </div>
 
       <button
         onClick={() => setIsFormOpen(true)}

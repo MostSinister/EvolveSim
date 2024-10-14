@@ -57,3 +57,34 @@ export const subscribeToCollection = (collectionName, callback) => {
     callback(data);
   });
 };
+
+export const exportCollectionToJSON = async (collectionName) => {
+  const data = await fetchCollection(collectionName);
+  const jsonString = JSON.stringify(data, null, 2);
+  const blob = new Blob([jsonString], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${collectionName}.json`;
+  link.click();
+};
+
+export const importCollectionFromJSON = async (collectionName, jsonFile) => {
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const data = JSON.parse(e.target.result);
+    const existingDocs = await fetchCollection(collectionName);
+    const existingIds = new Set(existingDocs.map(doc => doc.id));
+
+    for (const item of data) {
+      if (existingIds.has(item.id)) {
+        // Update existing document
+        await updateDocument(collectionName, item.id, item);
+      } else {
+        // Add new document
+        await addDocument(collectionName, item);
+      }
+    }
+  };
+  reader.readAsText(jsonFile);
+};
