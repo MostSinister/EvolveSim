@@ -8,7 +8,7 @@ import { fetchCollection } from '../firebaseService'; // Import the fetchCollect
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 const Card = ({ title, value, color, isDarkMode }) => (
-  <div className={`shadow-md rounded-lg p-4 ${isDarkMode ? 'bg-gray-700' : 'bg-white'} h-full flex flex-col justify-center items-center`}>
+  <div className={`shadow-md rounded-lg p-4 ${isDarkMode ? 'bg-gray-700' : 'bg-white'} h-full flex flex-col justify-center items-center no-select`}>
     <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-center`}>{title}</h3>
     <p className={`text-4xl font-bold ${color} text-center`}>{value}</p>
   </div>
@@ -91,6 +91,12 @@ const Dashboard = ({ isDarkMode }) => {
         .react-grid-item:hover > .react-resizable-handle {
           opacity: 1;
         }
+        .no-select {
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
       `}</style>
 
       <ResponsiveGridLayout
@@ -106,7 +112,7 @@ const Dashboard = ({ isDarkMode }) => {
         preventCollision={false}
       >
         {layout.map((item) => (
-          <div key={item.i}>
+          <div key={item.i} className="no-select">
             <Card
               title={item.i}
               value={cardData[item.i].value}

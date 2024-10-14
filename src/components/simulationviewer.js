@@ -1,26 +1,30 @@
 // src/components/simulationviewer.js
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { Resizable } from 'react-resizable';
+import 'react-resizable/css/styles.css';
 import SimulationControls from './simulationcontrols';
 import ZoomControl from './zoomcontrol';
 import DesignerPanel from './designerpanel';
 import ResultsPanel from './resultspanel';
-import ResizablePanels from './resizablepanels';
 import GridBackground from './GridBackground';
 
-const MovableElement = ({ children, initialPosition, anchorPoint }) => {
-  const [position, setPosition] = useState(initialPosition);
+const MovablePanel = ({ children, title, initialState, isDarkMode, onStateChange }) => {
+  const [state, setState] = useState(initialState);
   const [isDragging, setIsDragging] = useState(false);
 
   const handleMouseDown = (event) => {
-    const startX = event.pageX - position.x;
-    const startY = event.pageY - position.y;
+    const startX = event.clientX - state.position.x;
+    const startY = event.clientY - state.position.y;
     setIsDragging(true);
 
     const handleMouseMove = (event) => {
-      setPosition({
-        x: event.pageX - startX,
-        y: event.pageY - startY
-      });
+      const newPosition = {
+        x: event.clientX - startX,
+        y: event.clientY - startY
+      };
+      const newState = { ...state, position: newPosition };
+      setState(newState);
+      onStateChange(newState);
     };
 
     const handleMouseUp = () => {
@@ -33,89 +37,122 @@ const MovableElement = ({ children, initialPosition, anchorPoint }) => {
     document.addEventListener('mouseup', handleMouseUp);
   };
 
+  const onResize = (event, { size }) => {
+    const newState = { ...state, size };
+    setState(newState);
+    onStateChange(newState);
+  };
+
   return (
-    <div
-      style={{
-        position: 'absolute',
-        ...anchorPoint,
-        transform: `translate(${position.x}px, ${position.y}px)`,
-        cursor: isDragging ? 'grabbing' : 'grab',
-      }}
-      className={`no-select ${isDragging ? 'dragging' : ''}`}
-      onMouseDown={handleMouseDown}
+    <Resizable
+      width={state.size.width}
+      height={state.size.height}
+      onResize={onResize}
+      draggableOpts={{ grid: [25, 25] }}
     >
-      {children}
-    </div>
+      <div
+        className={`absolute rounded-lg shadow-lg overflow-hidden ${
+          isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'
+        } ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} bg-opacity-80`}
+        style={{
+          left: `${state.position.x}px`,
+          top: `${state.position.y}px`,
+          width: `${state.size.width}px`,
+          height: `${state.size.height}px`,
+        }}
+      >
+        <div
+          className={`p-2 font-bold ${
+            isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+          }`}
+          onMouseDown={handleMouseDown}
+        >
+          {title}
+        </div>
+        <div className="p-4 h-full overflow-auto">{children}</div>
+      </div>
+    </Resizable>
   );
 };
 
 const SimulationViewer = ({ isDarkMode }) => {
-  const [viewerSize, setViewerSize] = useState({ width: 0, height: 0 });
   const [zoomLevel, setZoomLevel] = useState(1);
-  const viewerRef = React.useRef(null);
+  const [designerPanelState, setDesignerPanelState] = useState(() => {
+    const saved = localStorage.getItem('designerPanelState');
+    return saved ? JSON.parse(saved) : { position: { x: 20, y: 60 }, size: { width: 300, height: 400 } };
+  });
+  const [resultsPanelState, setResultsPanelState] = useState(() => {
+    const saved = localStorage.getItem('resultsPanelState');
+    return saved ? JSON.parse(saved) : { position: { x: 340, y: 60 }, size: { width: 300, height: 400 } };
+  });
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    const updateSize = () => {
-      if (viewerRef.current) {
-        setViewerSize({
-          width: viewerRef.current.offsetWidth,
-          height: viewerRef.current.offsetHeight
-        });
-      }
-    };
+    localStorage.setItem('designerPanelState', JSON.stringify(designerPanelState));
+  }, [designerPanelState]);
 
-    window.addEventListener('resize', updateSize);
-    updateSize();
+  useEffect(() => {
+    localStorage.setItem('resultsPanelState', JSON.stringify(resultsPanelState));
+  }, [resultsPanelState]);
 
-    return () => window.removeEventListener('resize', updateSize);
+  const handleZoomChange = useCallback((newZoomLevel) => {
+    setZoomLevel(Math.min(Math.max(newZoomLevel, 0.1), 5));
   }, []);
 
-  const handleZoomIn = useCallback(() => {
-    setZoomLevel(prevZoom => Math.min(prevZoom * 1.2, 3));
+  const handleWheel = useCallback((event) => {
+    if (event.ctrlKey || event.metaKey) {
+      event.preventDefault();
+      const zoomFactor = event.deltaY > 0 ? 0.9 : 1.1; // Zoom out (0.9) or in (1.1)
+      setZoomLevel((prevZoom) => {
+        const newZoom = prevZoom * zoomFactor;
+        return Math.min(Math.max(newZoom, 0.1), 5);
+      });
+    }
   }, []);
 
-  const handleZoomOut = useCallback(() => {
-    setZoomLevel(prevZoom => Math.max(prevZoom / 1.2, 0.5));
-  }, []);
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('wheel', handleWheel, { passive: false });
+      return () => container.removeEventListener('wheel', handleWheel);
+    }
+  }, [handleWheel]);
 
   return (
-    <div ref={viewerRef} className="flex flex-col h-full relative">
-      <GridBackground zoomLevel={zoomLevel} />
-      <style jsx global>{`
-        .no-select {
-          -webkit-touch-callout: none;
-          -webkit-user-select: none;
-          -khtml-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          user-select: none;
-        }
-        .dragging {
-          pointer-events: none;
-        }
-      `}</style>
-      <MovableElement 
-        initialPosition={{ x: 0, y: 0 }} 
-        anchorPoint={{ top: '20px', right: '20px' }}
-      >
-        <ZoomControl 
-          isDarkMode={isDarkMode} 
-          onZoomIn={handleZoomIn}
-          onZoomOut={handleZoomOut}
-          zoomLevel={zoomLevel}
-        />
-      </MovableElement>
-      <MovableElement 
-        initialPosition={{ x: -150, y: -20 }} 
-        anchorPoint={{ bottom: '20px', left: '50%' }}
-      >
+    <div 
+      ref={containerRef}
+      className={`flex flex-col h-full ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}
+    >
+      <div className="flex-grow relative overflow-hidden">
+        <GridBackground zoomLevel={zoomLevel} />
+        <div className="absolute top-4 right-4 z-10">
+          <ZoomControl 
+            isDarkMode={isDarkMode} 
+            onZoomChange={handleZoomChange}
+            zoomLevel={zoomLevel}
+          />
+        </div>
+        <div style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top left' }}>
+          <MovablePanel 
+            title="Designer Panel" 
+            initialState={designerPanelState}
+            isDarkMode={isDarkMode}
+            onStateChange={setDesignerPanelState}
+          >
+            <DesignerPanel isDarkMode={isDarkMode} />
+          </MovablePanel>
+          <MovablePanel 
+            title="Results Panel" 
+            initialState={resultsPanelState}
+            isDarkMode={isDarkMode}
+            onStateChange={setResultsPanelState}
+          >
+            <ResultsPanel isDarkMode={isDarkMode} />
+          </MovablePanel>
+        </div>
+      </div>
+      <div className="p-4">
         <SimulationControls isDarkMode={isDarkMode} />
-      </MovableElement>
-      <div className="flex-grow">
-        <ResizablePanels>
-          <DesignerPanel isDarkMode={isDarkMode} />
-          <ResultsPanel isDarkMode={isDarkMode} />
-        </ResizablePanels>
       </div>
     </div>
   );
