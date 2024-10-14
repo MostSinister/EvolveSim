@@ -10,7 +10,16 @@ import {
   addDoc,
   onSnapshot
 } from 'firebase/firestore';
-import { validateData } from './utils/structureParser';
+import { validateData, validateAndConvertData } from './utils/structureParser';
+
+const convertFieldNames = (data) => {
+  const convertedData = {};
+  for (const [key, value] of Object.entries(data)) {
+    const safeKey = key.replace('/', '_');
+    convertedData[safeKey] = value;
+  }
+  return convertedData;
+};
 
 export const fetchCollection = async (collectionName) => {
   const querySnapshot = await getDocs(collection(db, collectionName));
@@ -22,19 +31,23 @@ export const deleteDocument = async (collectionName, id) => {
 };
 
 export const updateDocument = async (collectionName, id, data) => {
-  if (!validateData(collectionName, data)) {
+  const { isValid, convertedData } = validateAndConvertData(collectionName, data);
+  if (!isValid) {
     throw new Error('Invalid data structure');
   }
+  const safeData = convertFieldNames(convertedData);
   const docRef = doc(db, collectionName, id);
-  await updateDoc(docRef, data);
+  await updateDoc(docRef, safeData);
 };
 
 export const addDocument = async (collectionName, data) => {
-  if (!validateData(collectionName, data)) {
+  const { isValid, convertedData } = validateAndConvertData(collectionName, data);
+  if (!isValid) {
     throw new Error('Invalid data structure');
   }
-  const docRef = await addDoc(collection(db, collectionName), data);
-  return { id: docRef.id, ...data };
+  const safeData = convertFieldNames(convertedData);
+  const docRef = await addDoc(collection(db, collectionName), safeData);
+  return { id: docRef.id, ...safeData };
 };
 
 export const subscribeToCollection = (collectionName, callback) => {

@@ -30,14 +30,16 @@ const formatField = (key, value, componentType) => {
   console.log('Field type for', key, ':', fieldType);
 
   const capitalizeWords = (str) => {
-    return str.replace(/\b\w/g, (char) => char.toUpperCase());
+    return String(str).replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
   switch (fieldType) {
     case 'string':
+      if (key === 'Sequence') {
+        return String(value).toUpperCase().replace(/[^A-Z0-9]/g, '');
+      }
       return capitalizeWords(value);
     case 'integer':
-      return value === '' ? 0 : Math.floor(Number(value));
     case 'number':
       return value === '' ? 0 : Number(value);
     case 'enum':
@@ -140,13 +142,18 @@ function AdminPage({ isDarkMode }) {
       const fieldType = getFieldType(componentType, field);
       let formattedValue;
 
-      if (fieldType === 'integer') {
-        formattedValue = value === '' ? 0 : Math.floor(Number(value));
+      if (fieldType === 'integer' || fieldType === 'number') {
+        formattedValue = value === '' ? 0 : Number(value);
+      } else if (field === 'Sequence') {
+        formattedValue = String(value).toUpperCase().replace(/[^A-Z0-9]/g, '');
       } else {
         formattedValue = formatField(field, value, componentType);
       }
 
-      await updateDocument(componentType, id, { [field]: formattedValue });
+      // Replace '/' with '_' in the field name
+      const safeField = field.replace('/', '_');
+
+      await updateDocument(componentType, id, { [safeField]: formattedValue });
     } catch (error) {
       console.error('Error updating field:', error);
       toast.error('Failed to update field.');
@@ -213,6 +220,7 @@ function AdminPage({ isDarkMode }) {
                           onChange={(e) => handleFieldChange(component.id, key, e.target.value)}
                           className="w-full bg-transparent focus:outline-none"
                           step={biologicalStructure[componentType]?.properties[key]?.type === 'integer' ? 1 : undefined}
+                          style={key === 'Sequence' ? { textTransform: 'uppercase' } : {}}
                         />
                       )}
                     </td>

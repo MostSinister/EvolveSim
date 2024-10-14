@@ -15,7 +15,7 @@
         "properties": {
             "Neuron Type Name": { "type": "string" },
             "Subcategory": { "type": "string" },
-            "Sequence": { "type": "integer" },
+            "Sequence": { "type": "string" },
             "Behavior": { "type": "string" },
             "Receptor Slots": { "type": "integer" },
             "Output Slots": { "type": "integer" }
@@ -25,7 +25,7 @@
         "properties": {
             "Synapse Type Name": { "type": "string" },
             "Subcategory": { "type": "string" },
-            "Sequence": { "type": "integer" },
+            "Sequence": { "type": "string" },
             "Rules (Math Expressions)": { "type": "string" },
             "Expected Attributes": { "type": "string" },
             "Condition Expression": { "type": "string" },
@@ -38,7 +38,7 @@
             "Subcategory": { "type": "string" },
             "Sequence": { "type": "string" },
             "Bonus Type": { "type": "string" },
-            "Cell Bonus/Cost (Integer)": { "type": "integer" }
+            "Cell Bonus/Cost": { "type": "integer" }
         }
     }
 }
