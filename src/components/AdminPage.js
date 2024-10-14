@@ -3,52 +3,61 @@ import { db } from '../firebase'; // Import Firestore instance
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import NewComponentForm from './NewComponentForm'; // Import the new component form
 import EditComponentForm from './EditComponentForm'; // Import the new edit component form
+import { PlusCircle, Trash, Edit3, Clipboard } from 'lucide-react'; // Use icons for better UI
 
-const AdminPage = () => {
+const AdminPage = ({ isDarkMode }) => {
   const [componentType, setComponentType] = useState('Cells');
   const [entries, setEntries] = useState([]);
-  const [editMode, setEditMode] = useState(false);
-  const [currentDocId, setCurrentDocId] = useState(null);
-  const [isFormOpen, setFormOpen] = useState(false); // State to manage form visibility
-  const [isEditFormOpen, setEditFormOpen] = useState(false); // State to manage edit form visibility
+  const [isFormOpen, setFormOpen] = useState(false);
+  const [isEditFormOpen, setEditFormOpen] = useState(false);
   const [sortField, setSortField] = useState('Cell Type Name');
   const [sortOrder, setSortOrder] = useState('asc');
-  const [currentEntry, setCurrentEntry] = useState(null); // State to hold the current entry being edited
+  const [currentEntry, setCurrentEntry] = useState(null);
 
   useEffect(() => {
     fetchEntries();
-  }, [componentType]);
+  }, [componentType, sortField, sortOrder]);
 
   const fetchEntries = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, componentType));
-      const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setEntries(data);
+      let allEntries = [];
+      if (componentType === 'Show All') {
+        const types = ['Cells', 'Neurons', 'Synapses', 'Genes'];
+        for (const type of types) {
+          const querySnapshot = await getDocs(collection(db, type));
+          const data = querySnapshot.docs.map(doc => ({ id: doc.id, type, ...doc.data() }));
+          allEntries.push(...data);
+        }
+      } else {
+        const querySnapshot = await getDocs(collection(db, componentType));
+        allEntries = querySnapshot.docs.map(doc => ({ id: doc.id, type: componentType, ...doc.data() }));
+      }
+      setEntries(allEntries);
     } catch (error) {
       console.error('Error fetching entries:', error);
     }
   };
 
   const handleTypeChange = (e) => {
-    const type = e.target.value;
-    setComponentType(type);
-    setEditMode(false);
-    setCurrentDocId(null);
+    setComponentType(e.target.value);
+    setEntries([]); // Clear entries to prevent stale data
+    setCurrentEntry(null);
   };
 
   const handleEdit = (entry) => {
-    setEditMode(true);
-    setCurrentDocId(entry.id);
+    console.log('Editing entry:', entry); // Log the entry being edited
     setCurrentEntry(entry);
     setEditFormOpen(true);
   };
 
   const handleDelete = async (id) => {
-    try {
-      await deleteDoc(doc(db, componentType, id));
-      fetchEntries();
-    } catch (error) {
-      console.error('Error deleting component:', error);
+    if (window.confirm('Are you sure you want to delete this component?')) {
+      try {
+        await deleteDoc(doc(db, componentType, id));
+        fetchEntries(); // Refresh entries after deletion
+      } catch (error) {
+        console.error('Error deleting component:', error);
+      }
     }
   };
 
@@ -82,47 +91,57 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="h-screen p-6 flex flex-col">
-      <h2 className="text-2xl font-bold mb-4">Manage Components</h2>
-      <div className="mb-4">
-        <label className="block mb-2">Select Component Type</label>
-        <select
-          value={componentType}
-          onChange={handleTypeChange}
-          className="w-full p-2 border rounded"
-        >
-          <option value="Cells">Cells</option>
-          <option value="Neurons">Neurons</option>
-          <option value="Synapses">Synapses</option>
-          <option value="Genes">Genes</option>
-        </select>
+    <div className={`h-screen p-6 flex flex-col transition-colors duration-300 ${isDarkMode ? 'bg-gray-800 text-gray-100' : 'bg-gray-100 text-gray-800'}`}>
+      <h2 className="text-3xl font-bold mb-6 text-center">Manage Components</h2>
+      <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          <label className="text-lg">Component Type:</label>
+          <select
+            value={componentType}
+            onChange={handleTypeChange}
+            className="w-40 p-2 border rounded select-component-type bg-white text-gray-800"
+          >
+            <option value="Cells">Cells</option>
+            <option value="Neurons">Neurons</option>
+            <option value="Synapses">Synapses</option>
+            <option value="Genes">Genes</option>
+            <option value="Show All">Show All</option>
+          </select>
+        </div>
+        <div className="flex items-center space-x-4">
+          <label className="text-lg">Sort By:</label>
+          <select
+            value={sortField}
+            onChange={handleSortChange}
+            className="p-2 border rounded sort-by bg-white text-gray-800"
+          >
+            {Object.keys(entries[0] || {}).map((key) => (
+              <option key={key} value={key}>{key}</option>
+            ))}
+          </select>
+          <button onClick={toggleSortOrder} className={`p-2 border rounded ${isDarkMode ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'}`}>
+            {sortOrder === 'asc' ? 'Ascending' : 'Descending'}
+          </button>
+        </div>
       </div>
-      <div className="mb-4 flex items-center space-x-4">
-        <label className="block">Sort By:</label>
-        <select
-          value={sortField}
-          onChange={handleSortChange}
-          className="p-2 border rounded"
-        >
-          {Object.keys(entries[0] || {}).map((key) => (
-            <option key={key} value={key}>{key}</option>
-          ))}
-        </select>
-        <button onClick={toggleSortOrder} className="p-2 border rounded bg-blue-500 text-white">
-          {sortOrder === 'asc' ? 'Ascending' : 'Descending'}
-        </button>
-      </div>
-      <div className="flex-1 overflow-y-auto">
+      <div className={`flex-1 overflow-y-auto p-4 rounded-lg shadow-md transition-colors duration-300 ${isDarkMode ? 'bg-gray-700' : 'bg-white'}`}>
         {sortedEntries.length > 0 ? (
-          sortedEntries.map((entry) => (
-            <div key={entry.id} className="p-4 border rounded shadow hover:shadow-lg transition-shadow flex items-center justify-between mb-4">
+          sortedEntries.map((entry, index) => (
+            <div
+              key={`${entry.id}-${index}`} // Ensure unique key by appending index
+              className={`p-4 border-b last:border-b-0 flex items-center justify-between hover:bg-gray-50 transition-colors duration-300 ease-in-out ${isDarkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-100'}`}
+              onClick={() => handleEdit(entry)}
+            >
+              {componentType === 'Show All' && (
+                <span className="font-bold w-1/6 text-center">{entry.type}</span>
+              )}
               <span className="font-bold w-1/6 text-center">{entry['Cell Type Name'] || entry['Neuron Type Name'] || entry['Synapse Type Name'] || entry['Gene Type Name']}</span>
               <div className="flex-1 flex justify-between items-center space-x-4">
                 <div className="flex flex-col items-center w-1/6">
                   <span className="font-bold">Subcategory</span>
                   <span>{entry['Subcategory']}</span>
                 </div>
-                {fieldOrder[componentType].map((key) => (
+                {fieldOrder[entry.type].map((key) => (
                   <div key={key} className="flex flex-col items-center w-1/6">
                     <span className="font-bold">{key}</span>
                     <span>{entry[key]}</span>
@@ -131,14 +150,18 @@ const AdminPage = () => {
               </div>
               <div className="flex space-x-2 items-center">
                 <button
-                  onClick={() => handleCopyId(entry.id)}
-                  className="p-2 rounded-full bg-gray-300 hover:bg-gray-400 text-black"
+                  onClick={(e) => { e.stopPropagation(); handleCopyId(entry.id); }}
+                  className={`p-2 rounded-full ${isDarkMode ? 'bg-gray-600 hover:bg-gray-500 text-gray-200' : 'bg-gray-300 hover:bg-gray-400 text-black'}`}
                   aria-label="Copy Document ID"
                 >
-                  !
+                  <Clipboard size={16} />
                 </button>
-                <button onClick={() => handleEdit(entry)} className="text-blue-500 hover:text-blue-700">Edit</button>
-                <button onClick={() => handleDelete(entry.id)} className="text-red-500 hover:text-red-700">Delete</button>
+                <button onClick={(e) => { e.stopPropagation(); handleEdit(entry); }} className={`text-blue-500 hover:text-blue-700 ${isDarkMode ? 'text-blue-400' : 'text-blue-500'}`}>
+                  <Edit3 size={16} />
+                </button>
+                <button onClick={(e) => { e.stopPropagation(); handleDelete(entry.id); }} className={`text-red-500 hover:text-red-700 ${isDarkMode ? 'text-red-400' : 'text-red-500'}`}>
+                  <Trash size={16} />
+                </button>
               </div>
             </div>
           ))
@@ -150,9 +173,10 @@ const AdminPage = () => {
       {/* Floating + Icon */}
       <button
         onClick={() => setFormOpen(true)}
-        className="fixed bottom-8 right-8 bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-lg"
+        className={`fixed bottom-8 right-8 p-4 rounded-full shadow-lg flex items-center transition-colors duration-300 ${isDarkMode ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
       >
-        +
+        <PlusCircle size={24} />
+        <span className="ml-2">Add Component</span>
       </button>
 
       {/* New Component Form */}
@@ -161,6 +185,7 @@ const AdminPage = () => {
         onClose={() => setFormOpen(false)}
         componentType={componentType}
         fetchEntries={fetchEntries}
+        isDarkMode={isDarkMode}
       />
 
       {/* Edit Component Form */}
@@ -170,6 +195,7 @@ const AdminPage = () => {
         componentType={componentType}
         entry={currentEntry}
         fetchEntries={fetchEntries}
+        isDarkMode={isDarkMode}
       />
     </div>
   );

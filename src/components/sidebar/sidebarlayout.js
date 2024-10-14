@@ -20,7 +20,7 @@ const SidebarLayout = ({ isCollapsed, toggleSidebar, activeTab, setActiveTab, is
           className={`font-extrabold text-xl font-sans transition-opacity duration-300 ease-in-out ${
             isCollapsed ? 'opacity-0' : 'opacity-100'
           } ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}
-          style={{ flexGrow: isCollapsed ? 0 : 1 }}
+          style={{ flexGrow: isCollapsed ? 0 : 1, marginLeft: '10px' }} // Added margin-left
         >
           EvolveSim
         </h1>

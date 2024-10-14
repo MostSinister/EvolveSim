@@ -98,3 +98,23 @@ body {
   .card:hover {
     transform: translateY(-0.5rem);
   }
+
+.evolvesim-logo {
+    /* Add margin or padding to the left */
+    margin-left: 10px; /* or padding-left: 10px; */
+}
+
+/* Ensure text color remains black in dark mode */
+.select-component-type, .sort-by {
+    color: black !important; /* Override dark mode text color */
+}
+
+/* Fix the white outline of component entries */
+.component-entry {
+    border: 1px solid transparent; /* Remove white outline */
+    transition: border-color 0.3s;
+}
+
+.component-entry:hover {
+    border-color: #4a5568; /* Tailwind's gray-600 for dark mode */
+}

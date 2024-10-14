@@ -42,7 +42,7 @@ const App = () => {
             <Route path="/settings" element={<Settings isDarkMode={isDarkMode} />} />
             <Route path="/save" element={<Save isDarkMode={isDarkMode} />} />
             <Route path="/logs" element={<Logs isDarkMode={isDarkMode} />} />
-            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin" element={<AdminPage isDarkMode={isDarkMode} />} />
           </Routes>
         </main>
       </div>
