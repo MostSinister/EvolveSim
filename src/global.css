@@ -100,18 +100,17 @@ body {
   }
 
 .evolvesim-logo {
-    /* Add margin or padding to the left */
-    margin-left: 10px; /* or padding-left: 10px; */
+    margin-left: 10px;
 }
 
 /* Ensure text color remains black in dark mode */
 .select-component-type, .sort-by {
-    color: black !important; /* Override dark mode text color */
+    color: black !important;
 }
 
 /* Fix the white outline of component entries */
 .component-entry {
-    border: 1px solid transparent; /* Remove white outline */
+    border: 1px solid transparent;
     transition: border-color 0.3s;
 }
 

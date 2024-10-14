@@ -1,5 +1,6 @@
 // src/components/Dashboard.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { fetchCollection } from '../firebaseService'; // Import the fetchCollection function
 
 const Card = ({ title, value, color, isDarkMode }) => (
   <div className={`shadow-md rounded-lg p-4 transition-transform transform hover:scale-102 duration-300 ease-out ${isDarkMode ? 'bg-gray-700' : 'bg-white'}`}>
@@ -9,6 +10,35 @@ const Card = ({ title, value, color, isDarkMode }) => (
 );
 
 const Dashboard = ({ isDarkMode }) => {
+  const [counts, setCounts] = useState({
+    Cells: 0,
+    Synapses: 0,
+    Genes: 0,
+    Neurons: 0,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const cells = await fetchCollection('Cells');
+        const synapses = await fetchCollection('Synapses');
+        const genes = await fetchCollection('Genes');
+        const neurons = await fetchCollection('Neurons');
+
+        setCounts({
+          Cells: cells.length,
+          Synapses: synapses.length,
+          Genes: genes.length,
+          Neurons: neurons.length,
+        });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   // Sample data for dashboard display
   const totalOrganisms = 1000;
   const averageFitness = 0.75;
@@ -29,6 +59,13 @@ const Dashboard = ({ isDarkMode }) => {
             {simulationStatus}
           </p>
         </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-6 mt-6">
+        <Card title="Cells" value={counts.Cells} color="text-indigo-600" isDarkMode={isDarkMode} />
+        <Card title="Synapses" value={counts.Synapses} color="text-green-500" isDarkMode={isDarkMode} />
+        <Card title="Genes" value={counts.Genes} color="text-red-500" isDarkMode={isDarkMode} />
+        <Card title="Neurons" value={counts.Neurons} color="text-yellow-500" isDarkMode={isDarkMode} />
       </div>
     </div>
   );

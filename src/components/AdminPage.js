@@ -109,30 +109,20 @@ function AdminPage({ isDarkMode }) {
   const saveChanges = async () => {
     try {
       const updatePromises = Object.keys(editedComponents).map(async (id) => {
-        // Find the original component data
         const originalComponent = components.find(comp => comp.id === id);
         if (!originalComponent) {
           console.error(`Component with ID ${id} not found.`);
           return;
         }
 
-        // Merge the original component data with the edited fields
         const updatedComponent = { ...originalComponent, ...editedComponents[id] };
-
-        // Update each component
         await handleUpdate(updatedComponent);
       });
 
-      // Wait for all updates to complete
       await Promise.all(updatePromises);
-
-      // Clear edited components state
       setEditedComponents({});
-
-      // Fetch the updated list of components
       const updatedComponents = await fetchCollection(componentType);
       setComponents(updatedComponents);
-
       toast.success('Changes have been successfully saved.');
     } catch (error) {
       console.error('Error saving changes:', error);
@@ -143,14 +133,15 @@ function AdminPage({ isDarkMode }) {
   const orderedFields = Object.keys(biologicalStructure[componentType]) || [];
 
   return (
-    <div className={`p-4 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'} min-h-screen`}>
+    <div className={`p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'} min-h-screen`}>
       <ToastContainer />
-      <div className="mb-4 flex space-x-2">
+      <h1 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200">Manage Components</h1>
+      <div className="mb-6 flex justify-center space-x-4">
         {Object.keys(biologicalStructure).map((type) => (
           <button
             key={type}
             onClick={() => setComponentType(type)}
-            className={`px-4 py-2 rounded ${componentType === type ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'} hover:bg-blue-700`}
+            className={`px-4 py-2 rounded-lg ${componentType === type ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'} hover:bg-blue-700 transition-colors`}
           >
             {type}
           </button>
@@ -158,27 +149,27 @@ function AdminPage({ isDarkMode }) {
       </div>
 
       {loading ? (
-        <p className="text-gray-700 dark:text-gray-300">Loading...</p>
+        <p className="text-center text-gray-700 dark:text-gray-300">Loading...</p>
       ) : components.length === 0 ? (
-        <p className="text-gray-700 dark:text-gray-300">No components found.</p>
+        <p className="text-center text-gray-700 dark:text-gray-300">No components found.</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className={`w-full table-auto ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+          <table className={`w-full table-auto ${isDarkMode ? 'text-white' : 'text-gray-800'} mb-6`}>
             <thead>
-              <tr>
+              <tr className="bg-gray-200 dark:bg-gray-700">
                 {orderedFields.map((key) => (
-                  <th key={key} className="px-4 py-2 border-b">
+                  <th key={key} className="px-4 py-2 border-b text-left">
                     {key}
                   </th>
                 ))}
-                <th className="px-4 py-2 border-b">Actions</th>
+                <th className="px-4 py-2 border-b text-left">Actions</th>
               </tr>
             </thead>
             <tbody>
               {components.map((component) => (
                 <tr
                   key={component.id}
-                  className={`cursor-pointer ${themeClasses} transition duration-200 ease-in-out`}
+                  className={`hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors`}
                 >
                   {orderedFields.map((key) => (
                     <td key={key} className="border px-4 py-2">
