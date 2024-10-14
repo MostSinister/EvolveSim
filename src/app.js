@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+// src/App.js
+
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './global.css'; // Import global styles
 import SidebarLayout from './components/sidebar/sidebarlayout'; // Sidebar layout component
@@ -22,9 +24,19 @@ const App = () => {
   // Function to toggle dark mode
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
 
+  // Effect to add/remove 'dark' class on <html> element
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (isDarkMode) {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+
   return (
     <Router>
-      <div className={`flex h-screen ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+      <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
         <SidebarLayout
           isCollapsed={isSidebarCollapsed}
           toggleSidebar={() => setSidebarCollapsed(!isSidebarCollapsed)}
@@ -33,7 +45,7 @@ const App = () => {
           isDarkMode={isDarkMode}
           toggleDarkMode={toggleDarkMode}
         />
-        <main className={`flex-1 flex flex-col overflow-hidden ${activeTab === 'simulation' ? 'p-0' : 'p-4'}`}>
+        <main className="flex-1 flex flex-col overflow-hidden p-4">
           <Routes>
             <Route path="/" element={<Dashboard isDarkMode={isDarkMode} />} />
             <Route path="/simulation" element={<SimulationViewer isDarkMode={isDarkMode} />} />
