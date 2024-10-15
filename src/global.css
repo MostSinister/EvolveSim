@@ -1,0 +1,120 @@
+/* Global Styles */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    transition: background-color var(--transition-duration), color var(--transition-duration);
+}
+
+:root {
+    --bg-color-light: #ffffff;
+    --bg-color-dark: #1a202c;
+    --text-color-light: #1a202c;
+    --text-color-dark: #f7fafc;
+    --primary-color: #3b82f6; /* Tailwind's blue-500 */
+    --secondary-color: #10b981; /* Tailwind's green-500 */
+    --accent-color: #f59e0b; /* Tailwind's yellow-500 */
+    --transition-duration: 0.3s; /* Standardized transition duration */
+}
+
+/* Utility Classes */
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.shadow-md {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.transition-colors {
+    transition: background-color var(--transition-duration), color var(--transition-duration);
+}
+
+/* Dark Mode */
+.dark-mode {
+    background-color: var(--bg-color-dark);
+    color: var(--text-color-dark);
+}
+
+.light-mode {
+    background-color: var(--bg-color-light);
+    color: var(--text-color-light);
+}
+
+/* Button Styles */
+.button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: bold;
+    transition: background-color var(--transition-duration), transform 0.2s;
+}
+
+.button-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.button-primary:hover {
+    background-color: #2563eb; /* Tailwind's blue-600 */
+    transform: scale(1.05);
+}
+
+.button-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.button-secondary:hover {
+    background-color: #059669; /* Tailwind's green-600 */
+    transform: scale(1.05);
+}
+
+/* Input Styles */
+.input {
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    border: 1px solid #d1d5db; /* Tailwind's gray-300 */
+    transition: border-color var(--transition-duration);
+}
+
+.input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+/* Card Styles */
+.card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-0.5rem);
+}
+
+.evolvesim-logo {
+    margin-left: 10px;
+}
+
+/* Ensure text color remains black in dark mode */
+.select-component-type, .sort-by {
+    color: black !important;
+}
+
+/* Fix the white outline of component entries */
+.component-entry {
+    border: 1px solid transparent;
+    transition: border-color var(--transition-duration);
+}
+
+.component-entry:hover {
+    border-color: #4a5568; /* Tailwind's gray-600 for dark mode */
+}

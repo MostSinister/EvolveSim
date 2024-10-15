@@ -1,0 +1,285 @@
+{
+    "Cells": [
+      {
+        "Cell Type Name": "Stem Cells",
+        "Subcategory": "BasicCells",
+        "Sequence": "AAA",
+        "Health": 0,
+        "Energy Cost": 15,
+        "Energy Capacity": 1,
+        "Size": "Small",
+        "Armor": 2
+      },
+      {
+        "Cell Type Name": "Photosynthesis",
+        "Subcategory": "EnergyCells",
+        "Sequence": "ABB",
+        "Health": 4,
+        "Energy Cost": 1,
+        "Energy Capacity": 4,
+        "Size": "Medium",
+        "Armor": 2
+      },
+      {
+        "Cell Type Name": "Tazerballs",
+        "Subcategory": "OffensiveCells",
+        "Sequence": "AAB",
+        "Health": 5,
+        "Energy Cost": 5,
+        "Energy Capacity": 1,
+        "Size": "Small",
+        "Armor": 2
+      },
+      {
+        "Cell Type Name": "Spike Cells",
+        "Subcategory": "DefensiveCells",
+        "Sequence": "AAC",
+        "Health": 6,
+        "Energy Cost": 3,
+        "Energy Capacity": 2,
+        "Size": "Large",
+        "Armor": 5
+      },
+      {
+        "Cell Type Name": "Antenna Cells",
+        "Subcategory": "SensoryCells",
+        "Sequence": "ABA",
+        "Health": 3,
+        "Energy Cost": 2,
+        "Energy Capacity": 3,
+        "Size": "Small",
+        "Armor": 1
+      },
+      {
+        "Cell Type Name": "Adhesion Cells",
+        "Subcategory": "UtilityCells",
+        "Sequence": "ABB",
+        "Health": 2,
+        "Energy Cost": 4,
+        "Energy Capacity": 2,
+        "Size": "Medium",
+        "Armor": 1
+      },
+      {
+        "Cell Type Name": "Nerve Cells",
+        "Subcategory": "BasicCells",
+        "Sequence": "ACC",
+        "Health": 4,
+        "Energy Cost": 3,
+        "Energy Capacity": 2,
+        "Size": "Small",
+        "Armor": 1
+      },
+      {
+        "Cell Type Name": "Battery Cells",
+        "Subcategory": "EnergyCells",
+        "Sequence": "ACB",
+        "Health": 5,
+        "Energy Cost": 2,
+        "Energy Capacity": 6,
+        "Size": "Medium",
+        "Armor": 2
+      },
+      {
+        "Cell Type Name": "Blaster Cells",
+        "Subcategory": "OffensiveCells",
+        "Sequence": "ACA",
+        "Health": 7,
+        "Energy Cost": 6,
+        "Energy Capacity": 3,
+        "Size": "Large",
+        "Armor": 3
+      },
+      {
+        "Cell Type Name": "Shield Cells",
+        "Subcategory": "DefensiveCells",
+        "Sequence": "ACD",
+        "Health": 8,
+        "Energy Cost": 4,
+        "Energy Capacity": 2,
+        "Size": "Large",
+        "Armor": 6
+      },
+      {
+        "Cell Type Name": "Eye Cells",
+        "Subcategory": "SensoryCells",
+        "Sequence": "ADD",
+        "Health": 2,
+        "Energy Cost": 3,
+        "Energy Capacity": 1,
+        "Size": "Small",
+        "Armor": 1
+      },
+      {
+        "Cell Type Name": "Glue Cells",
+        "Subcategory": "UtilityCells",
+        "Sequence": "ADC",
+        "Health": 3,
+        "Energy Cost": 5,
+        "Energy Capacity": 2,
+        "Size": "Medium",
+        "Armor": 1
+      }
+    ],
+    "Neurons": [
+      {
+        "Neuron Type Name": "Motor Neuron",
+        "Subcategory": "FunctionalNeurons",
+        "Sequence": "CCC",
+        "Behavior": "Muscle Control",
+        "Receptor Slots": 3,
+        "Output Slots": 2
+      },
+      {
+        "Neuron Type Name": "Aggression Neuron",
+        "Subcategory": "OffensiveNeurons",
+        "Sequence": "DDD",
+        "Behavior": "Fight Response",
+        "Receptor Slots": 2,
+        "Output Slots": 1
+      },
+      {
+        "Neuron Type Name": "Social Neuron",
+        "Subcategory": "SocialNeurons",
+        "Sequence": "DDE",
+        "Behavior": "Group Coordination",
+        "Receptor Slots": 4,
+        "Output Slots": 3
+      },
+      {
+        "Neuron Type Name": "Creative Neuron",
+        "Subcategory": "CreativeNeurons",
+        "Sequence": "DDF",
+        "Behavior": "Problem Solving",
+        "Receptor Slots": 5,
+        "Output Slots": 4
+      },
+      {
+        "Neuron Type Name": "Sensory Neuron",
+        "Subcategory": "UtilityNeurons",
+        "Sequence": "CDE",
+        "Behavior": "Detect Environmental Changes",
+        "Receptor Slots": 3,
+        "Output Slots": 2
+      }
+    ],
+    "Synapses": [
+      {
+        "Synapse Type Name": "Gate Synapse",
+        "Subcategory": "GateSynapses",
+        "Sequence": "EEE",
+        "Rules (Math Expressions)": "IF Input > 1",
+        "Expected Attributes": "Signal Strength",
+        "Condition Expression": "Input > Threshold",
+        "Value": 0.5
+      },
+      {
+        "Synapse Type Name": "Threshold Synapse",
+        "Subcategory": "ThresholdSynapses",
+        "Sequence": "EEF",
+        "Rules (Math Expressions)": "IF Input >= 3 THEN Activate",
+        "Expected Attributes": "Input Value",
+        "Condition Expression": "Input >= Threshold",
+        "Value": 0.8
+      },
+      {
+        "Synapse Type Name": "Comparison Synapse",
+        "Subcategory": "ComparisonSynapses",
+        "Sequence": "EFG",
+        "Rules (Math Expressions)": "Compare Input A and B",
+        "Expected Attributes": "Comparison Result",
+        "Condition Expression": "A > B",
+        "Value": 0.6
+      },
+      {
+        "Synapse Type Name": "Spatial Synapse",
+        "Subcategory": "SpatialSynapses",
+        "Sequence": "EGH",
+        "Rules (Math Expressions)": "Check Spatial Alignment",
+        "Expected Attributes": "Position Data",
+        "Condition Expression": "Aligned",
+        "Value": 0.4
+      },
+      {
+        "Synapse Type Name": "Recognition Synapse",
+        "Subcategory": "RecognitionSynapses",
+        "Sequence": "FFF",
+        "Rules (Math Expressions)": "Match Pattern",
+        "Expected Attributes": "Pattern Match",
+        "Condition Expression": "Pattern = Input",
+        "Value": 0.9
+      }
+    ],
+    "Genes": [
+      {
+        "Gene Type Name": "Growth Gene",
+        "Subcategory": "BasicGenes",
+        "Sequence": "GGG",
+        "Bonus Type": "Size Increase",
+        "Cell Bonus/Cost": 2
+      },
+      {
+        "Gene Type Name": "Defense Gene",
+        "Subcategory": "IntermediateGenes",
+        "Sequence": "GGH",
+        "Bonus Type": "Armor Boost",
+        "Cell Bonus/Cost": 3
+      },
+      {
+        "Gene Type Name": "Regeneration Gene",
+        "Subcategory": "AdvancedGenes",
+        "Sequence": "GHI",
+        "Bonus Type": "Health Regeneration",
+        "Cell Bonus/Cost": 5
+      },
+      {
+        "Gene Type Name": "Energy Efficiency Gene",
+        "Subcategory": "BasicGenes",
+        "Sequence": "GJJ",
+        "Bonus Type": "Energy Cost Reduction",
+        "Cell Bonus/Cost": 1
+      },
+      {
+        "Gene Type Name": "Speed Gene",
+        "Subcategory": "AdvancedGenes",
+        "Sequence": "GJK",
+        "Bonus Type": "Movement Speed Boost",
+        "Cell Bonus/Cost": 4
+      },
+      {
+        "Gene Type Name": "Camouflage Gene",
+        "Subcategory": "IntermediateGenes",
+        "Sequence": "GLM",
+        "Bonus Type": "Visibility Reduction",
+        "Cell Bonus/Cost": 3
+      },
+      {
+        "Gene Type Name": "Adrenaline Gene",
+        "Subcategory": "AdvancedGenes",
+        "Sequence": "GNO",
+        "Bonus Type": "Short-Term Strength Boost",
+        "Cell Bonus/Cost": 6
+      },
+      {
+        "Gene Type Name": "Toughness Gene",
+        "Subcategory": "BasicGenes",
+        "Sequence": "GPT",
+        "Bonus Type": "Health Increase",
+        "Cell Bonus/Cost": 2
+      },
+      {
+        "Gene Type Name": "Metabolic Gene",
+        "Subcategory": "IntermediateGenes",
+        "Sequence": "GUV",
+        "Bonus Type": "Energy Conversion Efficiency",
+        "Cell Bonus/Cost": 4
+      },
+      {
+        "Gene Type Name": "Photosynthetic Gene",
+        "Subcategory": "AdvancedGenes",
+        "Sequence": "GXY",
+        "Bonus Type": "Energy Generation from Sunlight",
+        "Cell Bonus/Cost": 5
+      }
+    ]
+  }

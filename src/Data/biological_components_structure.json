@@ -1,0 +1,44 @@
+{
+    "Cells": {
+        "properties": {
+            "Cell Type Name": { "type": "string" },
+            "Subcategory": { "type": "string" },
+            "Sequence": { "type": "string" },
+            "Health": { "type": "integer" },
+            "Energy Cost": { "type": "integer" },
+            "Energy Capacity": { "type": "integer" },
+            "Size": { "type": "string", "enum": ["Small", "Medium", "Large", "X-Large"] },
+            "Armor": { "type": "integer" }
+        }
+    },
+    "Neurons": {
+        "properties": {
+            "Neuron Type Name": { "type": "string" },
+            "Subcategory": { "type": "string" },
+            "Sequence": { "type": "string" },
+            "Behavior": { "type": "string" },
+            "Receptor Slots": { "type": "integer" },
+            "Output Slots": { "type": "integer" }
+        }
+    },
+    "Synapses": {
+        "properties": {
+            "Synapse Type Name": { "type": "string" },
+            "Subcategory": { "type": "string" },
+            "Sequence": { "type": "string" },
+            "Rules (Math Expressions)": { "type": "string" },
+            "Expected Attributes": { "type": "string" },
+            "Condition Expression": { "type": "string" },
+            "Value": { "type": "number" }
+        }
+    },
+    "Genes": {
+        "properties": {
+            "Gene Type Name": { "type": "string" },
+            "Subcategory": { "type": "string" },
+            "Sequence": { "type": "string" },
+            "Bonus Type": { "type": "string" },
+            "Cell Bonus/Cost": { "type": "integer" }
+        }
+    }
+}
