@@ -35,4 +35,10 @@ export const cardConfig = [
     animationData: bacteriaAnimation3,
     textColor: 'purple'
   },
+  // Add the MessageCard to the cardConfig
+  {
+    id: 'WelcomeMessage',
+    type: 'message',
+    title: 'Welcome Message'
+  }
 ];

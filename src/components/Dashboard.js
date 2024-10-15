@@ -1,5 +1,5 @@
 // src/components/Dashboard.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
@@ -7,6 +7,7 @@ import { fetchCollection } from '../firebaseService';
 import StatCard from './StatCard';
 import OrganismCard from './OrganismCard';
 import OrganismInfoCard from './OrganismInfoCard';
+import MessageCard from './MessageCard';
 import { cardConfig } from '../config/cardConfig';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
@@ -19,17 +20,21 @@ const Dashboard = ({ isDarkMode }) => {
     Neurons: 0,
   });
 
-  const [layout, setLayout] = useState(() => {
-    const savedLayout = localStorage.getItem('dashboardLayout');
-    return savedLayout ? JSON.parse(savedLayout) : generateDefaultLayout();
-  });
-
-  const [cards, setCards] = useState(() => {
-    return cardConfig.map(card => ({
-      ...card,
-      value: card.id in counts ? counts[card.id] : card.value
+  const generateDefaultLayout = useMemo(() => {
+    return cardConfig.map((card, index) => ({
+      i: card.id,
+      x: (index % 3) * 2,
+      y: Math.floor(index / 3) * 2,
+      w: card.type === 'organism' || card.type === 'message' ? 2 : 2,
+      h: card.type === 'organism' || card.type === 'message' ? 2 : 1,
+      minW: card.type === 'organism' || card.type === 'message' ? 2 : 1,
+      minH: card.type === 'organism' || card.type === 'message' ? 2 : 1,
     }));
-  });
+  }, []);
+
+  const [layout, setLayout] = useState(generateDefaultLayout);
+
+  const [cards, setCards] = useState(cardConfig);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,6 +61,11 @@ const Dashboard = ({ isDarkMode }) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    // Ensure layout is updated when cardConfig changes
+    setLayout(generateDefaultLayout);
+  }, [cardConfig, generateDefaultLayout]);
+
   const updateCardValues = (newCounts) => {
     setCards(prevCards => prevCards.map(card => ({
       ...card,
@@ -63,36 +73,28 @@ const Dashboard = ({ isDarkMode }) => {
     })));
   };
 
-  function generateDefaultLayout() {
-    return cardConfig.map((card, index) => {
-      const isOrganism = card.type === 'organism';
-      return {
-        i: card.id,
-        x: (index % 3) * 2,
-        y: Math.floor(index / 3) * 2,
-        w: isOrganism ? 4 : 2,
-        h: isOrganism ? 3 : 1,
-        minW: isOrganism ? 2 : 1,
-        minH: isOrganism ? 2 : 1,
-      };
-    });
-  }
-
   const onLayoutChange = (newLayout) => {
     const updatedLayout = newLayout.map(item => {
       const card = cards.find(c => c.id === item.i);
+      if (!card) return item;
+
       const isOrganism = card.type === 'organism';
+      const isMessage = card.type === 'message';
       return {
         ...item,
-        minW: isOrganism ? 2 : 1,
-        minH: isOrganism ? 2 : 1,
-        w: Math.max(item.w, isOrganism ? 2 : 1),
-        h: Math.max(item.h, isOrganism ? 2 : 1),
+        minW: isOrganism || isMessage ? 2 : 1,
+        minH: isOrganism || isMessage ? 2 : 1,
+        w: Math.max(item.w, isOrganism || isMessage ? 2 : 1),
+        h: Math.max(item.h, isOrganism || isMessage ? 2 : 1),
       };
     });
     setLayout(updatedLayout);
     localStorage.setItem('dashboardLayout', JSON.stringify(updatedLayout));
   };
+
+  if (!layout || layout.length === 0) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={`p-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
@@ -148,16 +150,13 @@ const Dashboard = ({ isDarkMode }) => {
         margin={[10, 10]}
       >
         {cards.map((card) => {
-          const layoutItem = layout.find(l => l.i === card.id) || {};
+          const layoutItem = layout.find(l => l.i === card.id);
+          if (!layoutItem) return null;
           return (
             <div 
               key={card.id} 
               className="no-select" 
-              data-grid={{
-                ...layoutItem,
-                minW: card.type === 'organism' ? 2 : 1,
-                minH: card.type === 'organism' ? 2 : 1,
-              }}
+              data-grid={layoutItem}
             >
               {card.type === 'organism' ? (
                 card.id === 'Organism3' ? (
@@ -178,6 +177,8 @@ const Dashboard = ({ isDarkMode }) => {
                     textColor={card.textColor}
                   />
                 )
+              ) : card.type === 'message' ? (
+                <MessageCard isDarkMode={isDarkMode} />
               ) : (
                 <StatCard
                   title={card.title}
