@@ -1,4 +1,5 @@
 import React from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react'; // Add this import
 import ComponentRow from './ComponentRow';
 import ColumnResizer from './ColumnResizer';
 
@@ -19,13 +20,13 @@ function ComponentTable({
   setResizing,
   biologicalStructure,
   componentType,
-  componentCategories, // Add this prop
+  componentCategories,
 }) {
-  const getSortDirection = (key) => {
-    if (sortConfig.key === key) {
-      return sortConfig.direction === 'ascending' ? <ChevronUp className="w-4 h-4 inline-block ml-1" /> : <ChevronDown className="w-4 h-4 inline-block ml-1" />;
+  const getSortDirection = (field) => {
+    if (!sortConfig || sortConfig.key !== field) {
+      return null;
     }
-    return null;
+    return sortConfig.direction === 'ascending' ? <ChevronUp size={16} /> : <ChevronDown size={16} />;
   };
 
   return (
@@ -69,7 +70,7 @@ function ComponentTable({
               isDarkMode={isDarkMode}
               biologicalStructure={biologicalStructure}
               componentType={componentType}
-              componentCategories={componentCategories} // Pass this prop
+              componentCategories={componentCategories}
             />
           ))}
         </tbody>

@@ -21,11 +21,19 @@ const MainApp = ({ user, handleLogout }) => {
   // State for managing the sidebar's collapsed state
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
   
-  // State for managing the dark mode
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // Initialize dark mode state from localStorage
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return JSON.parse(localStorage.getItem('isDarkMode')) || false;
+  });
 
-  // Function to toggle dark mode
-  const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
+  // Function to toggle dark mode and save to localStorage
+  const toggleDarkMode = () => {
+    setIsDarkMode((prevMode) => {
+      const newMode = !prevMode;
+      localStorage.setItem('isDarkMode', JSON.stringify(newMode));
+      return newMode;
+    });
+  };
 
   return (
     // Main container with dynamic styling based on dark mode

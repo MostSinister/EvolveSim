@@ -275,14 +275,16 @@ function AdminPage({ isDarkMode }) {
           componentCategories={componentCategories}
         />
       )}
-      <ActionButtons
-        resetColumnWidths={resetColumnWidths}
-        handleExport={handleExport}
-        handleImport={handleImport}
-        setIsFormOpen={setIsFormOpen}
-        isImporting={isImporting}
-        importInputRef={importInputRef}
-      />
+      <div className="flex justify-end space-x-4 mt-4"> {/* Flexbox container for horizontal alignment */}
+        <ActionButtons
+          resetColumnWidths={resetColumnWidths}
+          handleExport={handleExport}
+          handleImport={handleImport}
+          setIsFormOpen={setIsFormOpen}
+          isImporting={isImporting}
+          importInputRef={importInputRef}
+        />
+      </div>
       <NewComponentForm
         componentType={componentType}
         isOpen={isFormOpen}
