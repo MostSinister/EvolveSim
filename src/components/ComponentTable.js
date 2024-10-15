@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react'; // Add this import
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import ComponentRow from './ComponentRow';
 import ColumnResizer from './ColumnResizer';
 
@@ -30,9 +30,9 @@ function ComponentTable({
   };
 
   return (
-    <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+    <div className="overflow-auto h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <table ref={tableRef} className="w-full table-auto">
-        <thead>
+        <thead className="sticky top-0 z-10">
           <tr className="bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
             {orderedFields.map((key, index) => (
               <th

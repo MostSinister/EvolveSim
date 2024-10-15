@@ -1,0 +1,153 @@
+{
+    "Cells": {
+      "Basic Cells": [
+        "Stem Cells",  // Cells that can differentiate into other types
+        "Neural Cells",  // Cells responsible for transmitting information
+        "Muscle Cells",  // Cells specialized for contraction and movement
+        "Adipocyte Cells",  // Cells that store fat
+        "Epithelial Cells",  // Cells that form protective layers
+        "Erythrocyte Cells"  // Red blood cells responsible for oxygen transport
+      ],
+      "Energy Cells": [
+        "Photosynthetic Cells",  // Cells that convert light into energy
+        "Battery Cells",  // Cells that store energy for later use
+        "Mitochondria-like Cells",  // Cells that generate energy like mitochondria
+        "Fuel Reserve Cells",  // Cells that store chemical fuels
+        "Energy Absorbing Cells"  // Cells that absorb external energy sources
+      ],
+      "Offensive Cells": [
+        "Taser Cells",  // Cells that deliver electric shocks
+        "Blaster Cells",  // Cells that shoot projectiles
+        "Acid Sprayer Cells",  // Cells that emit acid for attack
+        "Poison Dart Cells",  // Cells that inject toxins into targets
+        "Viral Injector Cells"  // Cells that spread harmful agents to enemies
+      ],
+      "Defensive Cells": [
+        "Shield Cells",  // Cells that form protective shields
+        "Armor Cells",  // Cells with tough outer layers for protection
+        "Reflective Cells",  // Cells that reflect attacks
+        "Deflection Cells",  // Cells that deflect incoming threats
+        "Absorption Cells"  // Cells that absorb damage or energy
+      ],
+      "Sensory Cells": [
+        "Antenna Cells",  // Cells that detect environmental signals
+        "Photo-receptor Cells",  // Cells that detect light
+        "Heat Detection Cells",  // Cells that sense temperature changes
+        "Vibration Detection Cells",  // Cells that detect movement or vibrations
+        "Electromagnetic Sensing Cells",  // Cells that detect electromagnetic fields
+        "Pheromone Detection Cells"  // Cells that detect chemical signals
+      ],
+      "Utility Cells": [
+        "Adhesion Cells",  // Cells that help attach to surfaces
+        "Cloning Cells",  // Cells that can duplicate themselves
+        "Transport Cells",  // Cells that move nutrients or substances
+        "Repair Cells",  // Cells that assist in tissue regeneration
+        "Waste Management Cells"  // Cells that handle waste disposal
+      ]
+    },
+    "Neurons": {
+      "Functional Neurons": [
+        "Motor Neuron",  // Neurons that control muscle actions
+        "Coordination Neuron",  // Neurons that manage complex movement
+        "Reflex Neuron",  // Neurons involved in reflex actions
+        "Motion Planning Neuron"  // Neurons that plan movement paths
+      ],
+      "Offensive Neurons": [
+        "Aggression Neuron",  // Neurons that trigger attack responses
+        "Combat Strategy Neuron",  // Neurons that devise combat tactics
+        "Targeting Neuron",  // Neurons that help in aiming at targets
+        "Predatory Instinct Neuron"  // Neurons that activate predatory behavior
+      ],
+      "Social Neurons": [
+        "Social Interaction Neuron",  // Neurons facilitating social behavior
+        "Empathy Neuron",  // Neurons that promote understanding of others
+        "Group Coordination Neuron",  // Neurons that help in group activities
+        "Communication Neuron"  // Neurons that enhance signaling between entities
+      ],
+      "Creative Neurons": [
+        "Creative Neuron",  // Neurons that encourage innovation
+        "Problem-solving Neuron",  // Neurons that assist in overcoming challenges
+        "Pattern Generation Neuron",  // Neurons that create visual or behavioral patterns
+        "Adaptive Response Neuron"  // Neurons that adapt responses based on context
+      ],
+      "Utility Neurons": [
+        "Sensory Relay Neuron",  // Neurons that transmit sensory information
+        "Environmental Mapping Neuron",  // Neurons that create spatial awareness
+        "Signal Relay Neuron",  // Neurons that pass along signals
+        "Resource Allocation Neuron"  // Neurons that manage internal resources
+      ]
+    },
+    "Synapses": {
+      "Gate Synapses": [
+        "Basic Gate Synapse",  // Simple synapses that regulate signal flow
+        "Input Gate Synapse",  // Synapses that control incoming signals
+        "Output Gate Synapse",  // Synapses that regulate outgoing signals
+        "Inhibitory Gate Synapse"  // Synapses that block or reduce signals
+      ],
+      "Threshold Synapses": [
+        "Activation Threshold Synapse",  // Synapses that activate at certain signal levels
+        "Inhibition Threshold Synapse",  // Synapses that inhibit at a defined threshold
+        "Critical Level Synapse",  // Synapses that respond at critical points
+        "Tolerance Synapse"  // Synapses that adjust based on tolerance levels
+      ],
+      "Comparison Synapses": [
+        "Comparator Synapse",  // Synapses that compare multiple signals
+        "Equality Checker Synapse",  // Synapses that check if inputs are equal
+        "Difference Detector Synapse",  // Synapses that detect differences between inputs
+        "Pattern Matching Synapse"  // Synapses that recognize specific patterns
+      ],
+      "Spatial Synapses": [
+        "Spatial Analysis Synapse",  // Synapses that assess spatial relationships
+        "Position Alignment Synapse",  // Synapses that ensure proper positioning
+        "Proximity Synapse",  // Synapses that detect closeness to other elements
+        "Spatial Memory Synapse"  // Synapses that remember spatial information
+      ],
+      "Recognition Synapses": [
+        "Pattern Recognition Synapse",  // Synapses that identify familiar patterns
+        "Object Identification Synapse",  // Synapses that recognize specific objects
+        "Signal Detection Synapse",  // Synapses that detect signals from the environment
+        "Cognitive Recognition Synapse"  // Synapses involved in higher-level recognition
+      ]
+    },
+    "Genes": {
+      "Basic Genes": [
+        "Growth Gene",  // Gene that promotes growth
+        "Energy Efficiency Gene",  // Gene that optimizes energy use
+        "Toughness Gene",  // Gene that enhances durability
+        "Health Boost Gene"  // Gene that improves health and resilience
+      ],
+      "Intermediate Genes": [
+        "Defense Gene",  // Gene that enhances protective traits
+        "Camouflage Gene",  // Gene that helps blend into surroundings
+        "Metabolic Efficiency Gene",  // Gene that improves metabolism
+        "Toxin Resistance Gene"  // Gene that provides resistance to toxins
+      ],
+      "Advanced Genes": [
+        "Regeneration Gene",  // Gene that enhances healing abilities
+        "Speed Gene",  // Gene that boosts speed and agility
+        "Adrenaline Surge Gene",  // Gene that provides bursts of energy
+        "Cognitive Enhancement Gene"  // Gene that enhances intelligence
+      ]
+    },
+    "Stimuli Nodes": {
+      "Passive Stimuli Nodes": [
+        "Hunger Drive",  // Represents the need for nourishment
+        "Pain Response",  // Indicates physical damage or distress
+        "Fatigue Indicator",  // Signals the need for rest
+        "Thirst Signal"  // Represents the need for hydration
+      ],
+      "Active Stimuli Nodes": [
+        "Visual Input",  // Input from visual stimuli
+        "Auditory Input",  // Input from sound stimuli
+        "Olfactory Input",  // Input from smell stimuli
+        "Tactile Input",  // Input from touch stimuli
+        "Thermal Detection"  // Detects temperature variations
+      ],
+      "Custom Stimuli Nodes": [
+        "Timer Node",  // Tracks time intervals
+        "Coordinate Mapping",  // Tracks position in space
+        "Population Counter",  // Monitors population levels
+        "Threat Level Assessment"  // Assesses the level of danger
+      ]
+    }
+  }

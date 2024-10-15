@@ -255,25 +255,27 @@ function AdminPage({ isDarkMode }) {
       ) : components.length === 0 ? (
         <p className="text-xl text-gray-700 dark:text-gray-300">No components found.</p>
       ) : (
-        <ComponentTable
-          components={sortedComponents}
-          orderedFields={orderedFields}
-          columnWidths={columnWidths}
-          setColumnWidths={setColumnWidths}
-          handleFieldChange={handleFieldChange}
-          handleEdit={handleEdit}
-          handleDelete={handleDelete}
-          handleDuplicate={handleDuplicate}
-          requestSort={requestSort}
-          sortConfig={sortConfig}
-          isDarkMode={isDarkMode}
-          tableRef={tableRef}
-          resizing={resizing}
-          setResizing={setResizing}
-          biologicalStructure={biologicalStructure}
-          componentType={componentType}
-          componentCategories={componentCategories}
-        />
+        <div className="h-[calc(100vh-300px)] overflow-hidden"> {/* Add this wrapper div */}
+          <ComponentTable
+            components={sortedComponents}
+            orderedFields={orderedFields}
+            columnWidths={columnWidths}
+            setColumnWidths={setColumnWidths}
+            handleFieldChange={handleFieldChange}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+            handleDuplicate={handleDuplicate}
+            requestSort={requestSort}
+            sortConfig={sortConfig}
+            isDarkMode={isDarkMode}
+            tableRef={tableRef}
+            resizing={resizing}
+            setResizing={setResizing}
+            biologicalStructure={biologicalStructure}
+            componentType={componentType}
+            componentCategories={componentCategories}
+          />
+        </div>
       )}
       <div className="flex justify-end space-x-4 mt-4"> {/* Flexbox container for horizontal alignment */}
         <ActionButtons
