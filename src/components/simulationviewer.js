@@ -8,10 +8,12 @@ import DesignerPanel from './designerpanel';
 import ResultsPanel from './resultspanel';
 import GridBackground from './GridBackground';
 
+// MovablePanel component for creating draggable and resizable panels
 const MovablePanel = ({ children, title, initialState, isDarkMode, onStateChange }) => {
   const [state, setState] = useState(initialState);
   const [isDragging, setIsDragging] = useState(false);
 
+  // Handle mouse down event for dragging
   const handleMouseDown = (event) => {
     const startX = event.clientX - state.position.x;
     const startY = event.clientY - state.position.y;
@@ -37,6 +39,7 @@ const MovablePanel = ({ children, title, initialState, isDarkMode, onStateChange
     document.addEventListener('mouseup', handleMouseUp);
   };
 
+  // Handle panel resize
   const onResize = (event, { size }) => {
     const newState = { ...state, size };
     setState(newState);
@@ -75,7 +78,9 @@ const MovablePanel = ({ children, title, initialState, isDarkMode, onStateChange
   );
 };
 
+// Main SimulationViewer component
 const SimulationViewer = ({ isDarkMode }) => {
+  // State for zoom level and panel positions
   const [zoomLevel, setZoomLevel] = useState(1);
   const [designerPanelState, setDesignerPanelState] = useState(() => {
     const saved = localStorage.getItem('designerPanelState');
@@ -87,6 +92,7 @@ const SimulationViewer = ({ isDarkMode }) => {
   });
   const containerRef = useRef(null);
 
+  // Save panel states to localStorage
   useEffect(() => {
     localStorage.setItem('designerPanelState', JSON.stringify(designerPanelState));
   }, [designerPanelState]);
@@ -95,10 +101,12 @@ const SimulationViewer = ({ isDarkMode }) => {
     localStorage.setItem('resultsPanelState', JSON.stringify(resultsPanelState));
   }, [resultsPanelState]);
 
+  // Handle zoom change
   const handleZoomChange = useCallback((newZoomLevel) => {
     setZoomLevel(Math.min(Math.max(newZoomLevel, 0.1), 5));
   }, []);
 
+  // Handle wheel event for zooming
   const handleWheel = useCallback((event) => {
     if (event.ctrlKey || event.metaKey) {
       event.preventDefault();
@@ -110,6 +118,7 @@ const SimulationViewer = ({ isDarkMode }) => {
     }
   }, []);
 
+  // Add wheel event listener
   useEffect(() => {
     const container = containerRef.current;
     if (container) {

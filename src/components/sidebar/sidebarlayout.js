@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'; // Icons for toggle
 import SidebarItems from './sidebaritems'; // Breakout menu items component
 import UserAvatar from '../UserAvatar';
 
+// SidebarLayout component definition
 const SidebarLayout = ({ 
   activeTab, 
   setActiveTab, 
@@ -12,21 +13,26 @@ const SidebarLayout = ({
   user, 
   handleLogout 
 }) => {
+  // State to manage whether the sidebar is collapsed
   const [isCollapsed, setIsCollapsed] = useState(() => {
     const savedState = localStorage.getItem('sidebarCollapsed');
     return savedState !== null ? JSON.parse(savedState) : false;
   });
 
+  // Determine sidebar width based on collapse state
   const sidebarWidth = isCollapsed ? '60px' : '256px'; // Adjusted the collapsed panel width
 
+  // Effect to save the collapse state to local storage
   useEffect(() => {
     localStorage.setItem('sidebarCollapsed', JSON.stringify(isCollapsed));
   }, [isCollapsed]);
 
+  // Function to toggle the sidebar collapse state
   const handleToggleSidebar = () => {
     setIsCollapsed(prevState => !prevState);
   };
 
+  // Render the sidebar layout
   return (
     <aside
       className={`shadow-md flex flex-col justify-between h-screen transition-all duration-500 ease-in-out ${
@@ -34,6 +40,7 @@ const SidebarLayout = ({
       }`}
       style={{ width: sidebarWidth, overflow: 'hidden' }}
     >
+      {/* Header with title and toggle button */}
       <div className={`flex items-center h-16 relative ${
         isDarkMode ? 'border-gray-700' : 'border-gray-200'
       }`}>

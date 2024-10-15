@@ -1,10 +1,12 @@
 // SidebarItems.js
 import React from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import { Home, Edit, Dna, BarChart2, Save, Settings, FileText, User, GripVertical } from 'lucide-react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom for navigation
+import { Home, Edit, Dna, BarChart2, Save, Settings, FileText, User, GripVertical } from 'lucide-react'; // Import icons
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'; // Import drag-and-drop components
 
+// SidebarItems component definition
 const SidebarItems = ({ isCollapsed, activeTab, setActiveTab, isDarkMode }) => {
+  // State to manage the list of menu items
   const [menuItems, setMenuItems] = React.useState([
     { icon: Home, label: 'Dashboard', id: 'dashboard', path: '/' },
     { icon: Edit, label: 'Simulation', id: 'simulation', path: '/simulation' },
@@ -16,14 +18,16 @@ const SidebarItems = ({ isCollapsed, activeTab, setActiveTab, isDarkMode }) => {
     { icon: User, label: 'Admin', id: 'admin', path: '/admin' },
   ]);
 
+  // Function to handle the end of a drag-and-drop action
   const onDragEnd = (result) => {
-    if (!result.destination) return;
+    if (!result.destination) return; // Exit if no destination
     const reorderedItems = Array.from(menuItems);
     const [movedItem] = reorderedItems.splice(result.source.index, 1);
     reorderedItems.splice(result.destination.index, 0, movedItem);
-    setMenuItems(reorderedItems);
+    setMenuItems(reorderedItems); // Update state with reordered items
   };
 
+  // Render the sidebar items
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="sidebar-items">

@@ -2,26 +2,28 @@ import biologicalStructure from '../Data/biological_components_structure.json';
 
 console.log('Loaded biological structure:', biologicalStructure);
 
+// Generate an order of fields for each component type
 export function generateFieldOrder() {
   const fieldOrder = {};
-
   for (const [componentType, structure] of Object.entries(biologicalStructure)) {
     fieldOrder[componentType] = Object.keys(structure.properties || {});
   }
-
   return fieldOrder;
 }
 
+// Get the type of a specific field for a component type
 export function getFieldType(componentType, fieldName) {
   console.log('Getting field type for:', componentType, fieldName);
   console.log('Component structure:', biologicalStructure[componentType]);
   return biologicalStructure[componentType]?.properties?.[fieldName]?.type || 'string';
 }
 
+// Get enum options for a specific field of a component type
 export function getEnumOptions(componentType, fieldName) {
   return biologicalStructure[componentType]?.properties?.[fieldName]?.enum || [];
 }
 
+// Validate data against the structure definition
 export function validateData(componentType, data) {
   const structure = biologicalStructure[componentType];
   if (!structure) return false;
@@ -55,14 +57,18 @@ export function validateData(componentType, data) {
   return true;
 }
 
+// Get the entire biological structure
 export function getStructure() {
   return biologicalStructure;
 }
 
+// Update the biological structure (placeholder function)
 export function updateStructure(newStructure) {
   console.log('Structure update requested:', newStructure);
+  // Implement actual update logic here
 }
 
+// Validate and convert data according to the structure definition
 export function validateAndConvertData(componentType, data) {
   const structure = biologicalStructure[componentType];
   if (!structure) return { isValid: false, convertedData: null };

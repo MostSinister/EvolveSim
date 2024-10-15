@@ -1,8 +1,10 @@
 // SidebarToggle.js
 import React from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react'; // Import icons for toggle
 
+// SidebarToggle component definition
 const SidebarToggle = ({ isCollapsed, toggleSidebar, isDarkMode }) => {
+  // Render the toggle button
   return (
     <button
       onClick={toggleSidebar}

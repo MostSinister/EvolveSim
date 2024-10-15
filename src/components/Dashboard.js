@@ -1,12 +1,13 @@
 // src/components/Dashboard.js
 import React, { useState, useEffect } from 'react';
-import { Responsive, WidthProvider } from 'react-grid-layout';
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
+import { Responsive, WidthProvider } from 'react-grid-layout'; // Import grid layout components
+import 'react-grid-layout/css/styles.css'; // Import grid layout styles
+import 'react-resizable/css/styles.css'; // Import resizable styles
 import { fetchCollection } from '../firebaseService'; // Import the fetchCollection function
 
-const ResponsiveGridLayout = WidthProvider(Responsive);
+const ResponsiveGridLayout = WidthProvider(Responsive); // Create a responsive grid layout
 
+// Card component to display individual dashboard items
 const Card = ({ title, value, color, isDarkMode }) => (
   <div className={`shadow-md rounded-lg p-4 ${isDarkMode ? 'bg-gray-700' : 'bg-white'} h-full flex flex-col justify-center items-center no-select transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg`}>
     <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-center`}>{title}</h3>
@@ -14,7 +15,9 @@ const Card = ({ title, value, color, isDarkMode }) => (
   </div>
 );
 
+// Main Dashboard component
 const Dashboard = ({ isDarkMode }) => {
+  // State to manage counts of different entities
   const [counts, setCounts] = useState({
     Cells: 0,
     Synapses: 0,
@@ -22,6 +25,7 @@ const Dashboard = ({ isDarkMode }) => {
     Neurons: 0,
   });
 
+  // State to manage the layout of the dashboard
   const [layout, setLayout] = useState(() => {
     const savedLayout = localStorage.getItem('dashboardLayout');
     return savedLayout ? JSON.parse(savedLayout) : [
@@ -36,6 +40,7 @@ const Dashboard = ({ isDarkMode }) => {
     ];
   });
 
+  // Effect to fetch data from the database
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,11 +63,13 @@ const Dashboard = ({ isDarkMode }) => {
     fetchData();
   }, []);
 
+  // Static data for the dashboard
   const totalOrganisms = 1000;
   const averageFitness = 0.75;
   const totalGenerations = 25;
   const simulationStatus = "Running";
 
+  // Data for each card in the dashboard
   const cardData = {
     'Total Organisms': { value: totalOrganisms, color: 'text-indigo-600' },
     'Average Fitness': { value: averageFitness, color: 'text-green-500' },
@@ -74,11 +81,13 @@ const Dashboard = ({ isDarkMode }) => {
     'Simulation Status': { value: simulationStatus, color: simulationStatus === "Running" ? "text-green-500" : "text-red-500" },
   };
 
+  // Function to handle layout changes
   const onLayoutChange = (newLayout) => {
     setLayout(newLayout);
     localStorage.setItem('dashboardLayout', JSON.stringify(newLayout));
   };
 
+  // Render the dashboard
   return (
     <div className={`p-4 ${isDarkMode ? 'text-white' : 'text-black'}`}>
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>

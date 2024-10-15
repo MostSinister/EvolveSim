@@ -1,0 +1,50 @@
+{
+    "CellsCategories": [
+      "BasicCells",
+      "EnergyCells",
+      "OffensiveCells",
+      "DefensiveCells",
+      "SensoryCells",
+      "UtilityCells"
+    ],
+    "GenesCategories": [
+      "BasicGenes",
+      "IntermediateGenes",
+      "AdvancedGenes"
+    ],
+    "NeuronsCategories": [
+      "BasicNeurons",
+      "OffensiveNeurons",
+      "SocialNeurons",
+      "CreativeNeurons",
+      "FunctionalNeurons",
+      "UtilityNeurons"
+    ],
+    "SynapsesCategories": [
+      "GateSynapses",
+      "ThresholdSynapses",
+      "ComparisonSynapses",
+      "SpatialSynapses",
+      "SocialSynapses",
+      "RecognitionSynapses"
+    ],
+    "StimuliNodeCategories": {
+      "Passive": [
+        "Hunger",
+        "Pain",
+        "ReproductionUrge"
+      ],
+      "Active": [
+        "Visual",
+        "Auditory",
+        "Olfactory",
+        "Gustatory",
+        "Tactile"
+      ],
+      "Custom": [
+        "Timer",
+        "Coordinate",
+        "PopulationCount"
+      ]
+    }
+  }

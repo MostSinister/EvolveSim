@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { PlusCircle, Trash, Edit3, Copy, Save, RefreshCw, Download, Upload } from 'lucide-react';
+import { PlusCircle, Trash, Edit3, Copy, Save, RefreshCw, Download, Upload, ChevronUp, ChevronDown } from 'lucide-react';
 import {
   subscribeToCollection,
   deleteDocument,
@@ -25,6 +25,7 @@ import {
 import { onSnapshot } from 'firebase/firestore';
 import { getFieldType, getStructure } from '../utils/structureParser';
 
+// Function to format fields based on their type
 const formatField = (key, value, componentType) => {
   if (value === null || value === undefined) return value;
 
@@ -34,6 +35,7 @@ const formatField = (key, value, componentType) => {
   const capitalizeWords = (str) => {
     return String(str).replace(/\b\w/g, (char) => char.toUpperCase());
   };
+
 
   switch (fieldType) {
     case 'string':
@@ -51,7 +53,9 @@ const formatField = (key, value, componentType) => {
   }
 };
 
+// Main component function
 function AdminPage({ isDarkMode }) {
+  // State variables to manage component data and UI states
   const [componentType, setComponentType] = useState('Cells');
   const [components, setComponents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -63,11 +67,14 @@ function AdminPage({ isDarkMode }) {
   const [columnWidths, setColumnWidths] = useState({});
   const tableRef = useRef(null);
   const [resizing, setResizing] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
 
+  // Determine theme classes based on dark mode
   const themeClasses = isDarkMode
     ? 'bg-gray-800 text-white'
     : 'bg-white text-gray-800';
 
+  // Function to format components data
   const formatComponents = useCallback((data) => {
     return data.map(component => {
       const formattedComponent = { ...component };
@@ -81,6 +88,8 @@ function AdminPage({ isDarkMode }) {
     });
   }, [componentType]);
 
+
+  // Effect to subscribe to component data changes
   useEffect(() => {
     setLoading(true);
     const unsubscribe = subscribeToCollection(componentType, (data) => {
@@ -92,13 +101,12 @@ function AdminPage({ isDarkMode }) {
     return () => unsubscribe();
   }, [componentType, formatComponents]);
 
+  // Effect to load column widths from local storage
   useEffect(() => {
-    // Load saved column widths from local storage for the current component type
     const savedWidths = localStorage.getItem(`columnWidths_${componentType}`);
     if (savedWidths) {
       setColumnWidths(JSON.parse(savedWidths));
     } else {
-      // If no saved widths, set default widths
       const defaultWidths = {};
       orderedFields.forEach((field, index) => {
         defaultWidths[index] = 150; // Default width of 150px
@@ -107,6 +115,7 @@ function AdminPage({ isDarkMode }) {
     }
   }, [componentType]);
 
+  // Function to handle component deletion
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this component?')) {
       try {
@@ -119,11 +128,13 @@ function AdminPage({ isDarkMode }) {
     }
   };
 
+  // Function to open edit form for a component
   const handleEdit = (component) => {
     setSelectedComponent(component);
     setIsEditFormOpen(true);
   };
 
+  // Function to update a component
   const handleUpdate = async (updatedComponent) => {
     try {
       if (!updatedComponent.id) {
@@ -139,6 +150,7 @@ function AdminPage({ isDarkMode }) {
     }
   };
 
+  // Function to add a new component
   const handleAdd = async (newComponentData) => {
     try {
       const { id, ...dataWithoutId } = newComponentData;
@@ -151,11 +163,13 @@ function AdminPage({ isDarkMode }) {
     }
   };
 
+  // Function to duplicate a component
   const handleDuplicate = async (component) => {
     const { id, ...duplicatedComponent } = component;
     await handleAdd(duplicatedComponent);
   };
 
+  // Function to handle field changes in components
   const handleFieldChange = async (id, field, value) => {
     try {
       const updatedComponent = components.find(comp => comp.id === id);
@@ -172,6 +186,7 @@ function AdminPage({ isDarkMode }) {
         formattedValue = formatField(field, value, componentType);
       }
 
+
       // Replace '/' with '_' in the field name
       const safeField = field.replace('/', '_');
 
@@ -182,12 +197,15 @@ function AdminPage({ isDarkMode }) {
     }
   };
 
+  // Ordered list of fields for the current component type
   const orderedFields = Object.keys(biologicalStructure[componentType]?.properties || {});
 
+  // Function to export components to JSON
   const handleExport = () => {
     exportCollectionToJSON(componentType);
   };
 
+  // Function to import components from JSON
   const handleImport = async (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -207,10 +225,12 @@ function AdminPage({ isDarkMode }) {
     }
   };
 
+  // Function to start resizing a column
   const startColumnResize = useCallback((index, startX) => {
     setResizing({ index, startX, initialWidth: columnWidths[index] || 150 });
   }, [columnWidths]);
 
+  // Function to handle mouse movement during column resizing
   const handleMouseMove = useCallback((e) => {
     if (!resizing) return;
 
@@ -223,6 +243,7 @@ function AdminPage({ isDarkMode }) {
     }));
   }, [resizing]);
 
+  // Function to handle mouse release after resizing
   const handleMouseUp = useCallback(() => {
     if (resizing) {
       // Save updated widths to local storage for the current component type
@@ -231,6 +252,7 @@ function AdminPage({ isDarkMode }) {
     setResizing(null);
   }, [resizing, componentType, columnWidths]);
 
+  // Effect to add/remove event listeners for column resizing
   useEffect(() => {
     if (resizing) {
       window.addEventListener('mousemove', handleMouseMove);
@@ -245,6 +267,7 @@ function AdminPage({ isDarkMode }) {
     };
   }, [resizing, handleMouseMove, handleMouseUp]);
 
+  // Function to reset column widths to default
   const resetColumnWidths = useCallback(() => {
     const table = tableRef.current;
     if (!table) return;
@@ -270,6 +293,42 @@ function AdminPage({ isDarkMode }) {
     localStorage.setItem(`columnWidths_${componentType}`, JSON.stringify(newWidths));
   }, [componentType, orderedFields.length]);
 
+  // Memoized sorted components based on sort configuration
+  const sortedComponents = React.useMemo(() => {
+    let sortableItems = [...components];
+    if (sortConfig.key !== null) {
+      sortableItems.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortableItems;
+  }, [components, sortConfig]);
+
+  // Function to request sorting by a specific key
+  const requestSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+
+  // Function to get the sort direction icon for a column
+  const getSortDirection = (key) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === 'ascending' ? <ChevronUp className="w-4 h-4 inline-block ml-1" /> : <ChevronDown className="w-4 h-4 inline-block ml-1" />;
+    }
+    return null;
+  };
+
+  // Render the component UI
   return (
     <div className={`p-8 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'} min-h-screen`}>
       <ToastContainer />
@@ -301,14 +360,19 @@ function AdminPage({ isDarkMode }) {
                 {orderedFields.map((key, index) => (
                   <th
                     key={key}
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider relative whitespace-nowrap overflow-hidden text-ellipsis"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider relative whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer"
                     style={{ width: columnWidths[index] || 150, maxWidth: columnWidths[index] || 150 }}
+                    onClick={() => requestSort(key)}
                   >
-                    {key}
+                    <span className="flex items-center">
+                      {key}
+                      {getSortDirection(key)}
+                    </span>
                     <div
                       className="absolute top-0 right-0 bottom-0 w-1 cursor-col-resize bg-gray-300 dark:bg-gray-600 hover:bg-blue-500 dark:hover:bg-blue-400"
                       onMouseDown={(e) => {
                         e.preventDefault();
+                        e.stopPropagation(); // Prevent sorting when resizing
                         startColumnResize(index, e.clientX);
                       }}
                     />
@@ -317,11 +381,14 @@ function AdminPage({ isDarkMode }) {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider" style={{ width: '120px', minWidth: '120px' }}>Actions</th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
-              {components.map((component) => (
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-600">
+              {sortedComponents.map((component) => (
                 <tr
                   key={component.id}
-                  className={`${themeClasses} hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150 ease-in-out`}
+                  className={`
+                    ${isDarkMode ? 'text-black hover:bg-gray-700' : 'text-gray-800 hover:bg-gray-50'}
+                    transition-colors duration-150 ease-in-out
+                  `}
                 >
                   {orderedFields.map((key, index) => (
                     <td
@@ -334,10 +401,11 @@ function AdminPage({ isDarkMode }) {
                         <select
                           value={component[key]}
                           onChange={(e) => handleFieldChange(component.id, key, e.target.value)}
-                          className="w-full bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                          className={`w-full bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 rounded
+                            ${isDarkMode ? 'text-black' : 'text-gray-800'}`}
                         >
                           {biologicalStructure[componentType]?.properties[key]?.enum?.map((size) => (
-                            <option key={size} value={size}>{size}</option>
+                            <option key={size} value={size} className={isDarkMode ? 'bg-gray-800 text-black' : 'bg-white text-gray-800'}>{size}</option>
                           ))}
                         </select>
                       ) : (
@@ -346,6 +414,7 @@ function AdminPage({ isDarkMode }) {
                           value={component[key]}
                           onChange={(e) => handleFieldChange(component.id, key, e.target.value)}
                           className={`w-full bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 rounded
+                            ${isDarkMode ? 'text-black' : 'text-gray-800'}
                             ${(biologicalStructure[componentType]?.properties[key]?.type === 'integer' || 
                                biologicalStructure[componentType]?.properties[key]?.type === 'number') 
                                ? 'text-center' : ''}`}

@@ -1,6 +1,9 @@
 // firebaseService.js
+// This module provides utility functions for interacting with Firebase Firestore.
+// It includes operations for fetching, adding, updating, and deleting documents,
+// as well as importing and exporting collection data.
 
-import { db } from './firebase'; // Adjusted import to match your firebase.js file
+import { db } from './firebase'; // Import the Firestore database instance
 import {
   collection,
   getDocs,
@@ -12,6 +15,7 @@ import {
 } from 'firebase/firestore';
 import { validateData, validateAndConvertData } from './utils/structureParser';
 
+// Helper function to convert field names containing '/' to '_'
 const convertFieldNames = (data) => {
   const convertedData = {};
   for (const [key, value] of Object.entries(data)) {
@@ -21,6 +25,7 @@ const convertFieldNames = (data) => {
   return convertedData;
 };
 
+// Fetch all documents from a specified collection
 export const fetchCollection = async (collectionName) => {
   try {
     const querySnapshot = await getDocs(collection(db, collectionName));
@@ -33,10 +38,12 @@ export const fetchCollection = async (collectionName) => {
   }
 };
 
+// Delete a document from a specified collection
 export const deleteDocument = async (collectionName, id) => {
   await deleteDoc(doc(db, collectionName, id));
 };
 
+// Update a document in a specified collection
 export const updateDocument = async (collectionName, id, data) => {
   const { isValid, convertedData } = validateAndConvertData(collectionName, data);
   if (!isValid) {
@@ -47,6 +54,7 @@ export const updateDocument = async (collectionName, id, data) => {
   await updateDoc(docRef, safeData);
 };
 
+// Add a new document to a specified collection
 export const addDocument = async (collectionName, data) => {
   const { isValid, convertedData } = validateAndConvertData(collectionName, data);
   if (!isValid) {
@@ -57,6 +65,7 @@ export const addDocument = async (collectionName, data) => {
   return { id: docRef.id, ...safeData };
 };
 
+// Subscribe to real-time updates from a specified collection
 export const subscribeToCollection = (collectionName, callback) => {
   console.log(`Subscribing to collection: ${collectionName}`);
   const collectionRef = collection(db, collectionName);
@@ -69,6 +78,7 @@ export const subscribeToCollection = (collectionName, callback) => {
   });
 };
 
+// Export a collection to a JSON file
 export const exportCollectionToJSON = async (collectionName) => {
   const data = await fetchCollection(collectionName);
   const jsonString = JSON.stringify(data, null, 2);
@@ -80,6 +90,7 @@ export const exportCollectionToJSON = async (collectionName) => {
   link.click();
 };
 
+// Import data from a JSON file into a specified collection
 export const importCollectionFromJSON = async (collectionName, jsonFile) => {
   const reader = new FileReader();
   reader.onload = async (e) => {
