@@ -1,23 +1,17 @@
 // src/components/Dashboard.js
 import React, { useState, useEffect } from 'react';
-import { Responsive, WidthProvider } from 'react-grid-layout'; // Import grid layout components
-import 'react-grid-layout/css/styles.css'; // Import grid layout styles
-import 'react-resizable/css/styles.css'; // Import resizable styles
-import { fetchCollection } from '../firebaseService'; // Import the fetchCollection function
+import { Responsive, WidthProvider } from 'react-grid-layout';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+import { fetchCollection } from '../firebaseService';
+import StatCard from './StatCard';
+import OrganismCard from './OrganismCard';
+import OrganismInfoCard from './OrganismInfoCard';
+import { cardConfig } from '../config/cardConfig';
 
-const ResponsiveGridLayout = WidthProvider(Responsive); // Create a responsive grid layout
+const ResponsiveGridLayout = WidthProvider(Responsive);
 
-// Card component to display individual dashboard items
-const Card = ({ title, value, color, isDarkMode }) => (
-  <div className={`shadow-md rounded-lg p-4 ${isDarkMode ? 'bg-gray-700' : 'bg-white'} h-full flex flex-col justify-center items-center no-select transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg`}>
-    <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-center`}>{title}</h3>
-    <p className={`text-4xl font-bold ${color} text-center`}>{value}</p>
-  </div>
-);
-
-// Main Dashboard component
 const Dashboard = ({ isDarkMode }) => {
-  // State to manage counts of different entities
   const [counts, setCounts] = useState({
     Cells: 0,
     Synapses: 0,
@@ -25,22 +19,18 @@ const Dashboard = ({ isDarkMode }) => {
     Neurons: 0,
   });
 
-  // State to manage the layout of the dashboard
   const [layout, setLayout] = useState(() => {
     const savedLayout = localStorage.getItem('dashboardLayout');
-    return savedLayout ? JSON.parse(savedLayout) : [
-      { i: 'Total Organisms', x: 0, y: 0, w: 2, h: 1 },
-      { i: 'Average Fitness', x: 2, y: 0, w: 2, h: 1 },
-      { i: 'Total Generations', x: 4, y: 0, w: 2, h: 1 },
-      { i: 'Cells', x: 0, y: 1, w: 2, h: 1 },
-      { i: 'Synapses', x: 2, y: 1, w: 2, h: 1 },
-      { i: 'Genes', x: 4, y: 1, w: 2, h: 1 },
-      { i: 'Neurons', x: 0, y: 2, w: 2, h: 1 },
-      { i: 'Simulation Status', x: 2, y: 2, w: 4, h: 1 },
-    ];
+    return savedLayout ? JSON.parse(savedLayout) : generateDefaultLayout();
   });
 
-  // Effect to fetch data from the database
+  const [cards, setCards] = useState(() => {
+    return cardConfig.map(card => ({
+      ...card,
+      value: card.id in counts ? counts[card.id] : card.value
+    }));
+  });
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,12 +39,15 @@ const Dashboard = ({ isDarkMode }) => {
         const genes = await fetchCollection('Genes');
         const neurons = await fetchCollection('Neurons');
 
-        setCounts({
+        const newCounts = {
           Cells: cells.length,
           Synapses: synapses.length,
           Genes: genes.length,
           Neurons: neurons.length,
-        });
+        };
+
+        setCounts(newCounts);
+        updateCardValues(newCounts);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -63,34 +56,47 @@ const Dashboard = ({ isDarkMode }) => {
     fetchData();
   }, []);
 
-  // Static data for the dashboard
-  const totalOrganisms = 1000;
-  const averageFitness = 0.75;
-  const totalGenerations = 25;
-  const simulationStatus = "Running";
-
-  // Data for each card in the dashboard
-  const cardData = {
-    'Total Organisms': { value: totalOrganisms, color: 'text-indigo-600' },
-    'Average Fitness': { value: averageFitness, color: 'text-green-500' },
-    'Total Generations': { value: totalGenerations, color: 'text-red-500' },
-    'Cells': { value: counts.Cells, color: 'text-purple-500' },
-    'Synapses': { value: counts.Synapses, color: 'text-yellow-500' },
-    'Genes': { value: counts.Genes, color: 'text-blue-500' },
-    'Neurons': { value: counts.Neurons, color: 'text-pink-500' },
-    'Simulation Status': { value: simulationStatus, color: simulationStatus === "Running" ? "text-green-500" : "text-red-500" },
+  const updateCardValues = (newCounts) => {
+    setCards(prevCards => prevCards.map(card => ({
+      ...card,
+      value: card.id in newCounts ? newCounts[card.id] : card.value
+    })));
   };
 
-  // Function to handle layout changes
+  function generateDefaultLayout() {
+    return cardConfig.map((card, index) => {
+      const isOrganism = card.type === 'organism';
+      return {
+        i: card.id,
+        x: (index % 3) * 2,
+        y: Math.floor(index / 3) * 2,
+        w: isOrganism ? 4 : 2,
+        h: isOrganism ? 3 : 1,
+        minW: isOrganism ? 2 : 1,
+        minH: isOrganism ? 2 : 1,
+      };
+    });
+  }
+
   const onLayoutChange = (newLayout) => {
-    setLayout(newLayout);
-    localStorage.setItem('dashboardLayout', JSON.stringify(newLayout));
+    const updatedLayout = newLayout.map(item => {
+      const card = cards.find(c => c.id === item.i);
+      const isOrganism = card.type === 'organism';
+      return {
+        ...item,
+        minW: isOrganism ? 2 : 1,
+        minH: isOrganism ? 2 : 1,
+        w: Math.max(item.w, isOrganism ? 2 : 1),
+        h: Math.max(item.h, isOrganism ? 2 : 1),
+      };
+    });
+    setLayout(updatedLayout);
+    localStorage.setItem('dashboardLayout', JSON.stringify(updatedLayout));
   };
 
-  // Render the dashboard
   return (
-    <div className={`p-4 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+    <div className={`p-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+      <h1 className="text-xl font-bold mb-2">Dashboard</h1>
 
       <style>{`
         .react-grid-item > .react-resizable-handle::after {
@@ -112,9 +118,19 @@ const Dashboard = ({ isDarkMode }) => {
         }
         .react-grid-item {
           transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+          display: flex;
+          align-items: stretch;
+        }
+        .react-grid-item > div {
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
         }
         .react-grid-item:hover {
           z-index: 1;
+        }
+        .text-xxs {
+          font-size: 0.625rem;
         }
       `}</style>
 
@@ -123,23 +139,56 @@ const Dashboard = ({ isDarkMode }) => {
         layouts={{ lg: layout }}
         breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
         cols={{ lg: 6, md: 6, sm: 4, xs: 2, xxs: 1 }}
-        rowHeight={120}
+        rowHeight={80}
         onLayoutChange={onLayoutChange}
         isDraggable={true}
         isResizable={true}
         compactType="vertical"
         preventCollision={false}
+        margin={[10, 10]}
       >
-        {layout.map((item) => (
-          <div key={item.i} className="no-select">
-            <Card
-              title={item.i}
-              value={cardData[item.i].value}
-              color={cardData[item.i].color}
-              isDarkMode={isDarkMode}
-            />
-          </div>
-        ))}
+        {cards.map((card) => {
+          const layoutItem = layout.find(l => l.i === card.id) || {};
+          return (
+            <div 
+              key={card.id} 
+              className="no-select" 
+              data-grid={{
+                ...layoutItem,
+                minW: card.type === 'organism' ? 2 : 1,
+                minH: card.type === 'organism' ? 2 : 1,
+              }}
+            >
+              {card.type === 'organism' ? (
+                card.id === 'Organism3' ? (
+                  <OrganismInfoCard
+                    isDarkMode={isDarkMode}
+                    animationData={card.animationData}
+                    name={card.name}
+                    description={card.description}
+                    textColor={card.textColor}
+                    stats={{ Speed: 'Moderate', Size: 'Gigantic', Intelligence: 'Prime' }}
+                  />
+                ) : (
+                  <OrganismCard
+                    isDarkMode={isDarkMode}
+                    animationData={card.animationData}
+                    name={card.name}
+                    description={card.description}
+                    textColor={card.textColor}
+                  />
+                )
+              ) : (
+                <StatCard
+                  title={card.title}
+                  value={card.value}
+                  color={card.color}
+                  isDarkMode={isDarkMode}
+                />
+              )}
+            </div>
+          );
+        })}
       </ResponsiveGridLayout>
     </div>
   );

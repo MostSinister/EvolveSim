@@ -1,6 +1,6 @@
 # EvolveSim
 
-![Project Logo](https://via.placeholder.com/150)
+![Project Logo](src\assets\Images\petrydish.jpg)
 
 ## Description
 **EvolveSim** is a 2D simulation game where players design and evolve modular organisms in a dynamic, physics-based environment. The game combines elements of real-time strategy (RTS), rogue-like progression, and emergent behaviors to create an ever-evolving ecosystem where organisms compete for survival, resources, and dominance.
