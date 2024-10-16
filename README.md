@@ -1,9 +1,11 @@
 # EvolveSim
 
-![Project Logo](https://via.placeholder.com/150)
+![Project Logo](src\assets\Images\petrydish.jpg)
 
 ## Description
 **EvolveSim** is a 2D simulation game where players design and evolve modular organisms in a dynamic, physics-based environment. The game combines elements of real-time strategy (RTS), rogue-like progression, and emergent behaviors to create an ever-evolving ecosystem where organisms compete for survival, resources, and dominance.
+
+**Live Demo**: [evolvesim.com](https://evolvesim.com)
 
 ## Features
 
@@ -47,18 +49,28 @@ Compete against AI-controlled organisms or other players:
 - **PvP**: Battle other players' organisms in real-time, strategic matches.
 
 ## Technical Overview
-The project is built as a web-based app leveraging modern web technologies, with Firebase as the backend for managing user data, organism stats, and progression. The core simulation and editor are handled by Godot, embedded within the web app via HTML5 export.
+The project is built as a web-based app leveraging modern web technologies, with Firebase as the backend for managing user data, organism stats, and progression.
 
 ### Technologies Used:
-- **Frontend**: HTML, JavaScript, TailwindCSS for UI and interactions.
-- **Backend**: Firebase for storing simulation results, user progression, and organism data.
-- **Simulation Engine**: Godot (HTML5 export) for handling the physics-based organism interactions and simulation logic.
+- **Frontend**: React, Redux, TailwindCSS, Styled Components
+- **Backend**: Firebase for storing simulation results, user progression, and organism data
+- **State Management**: Redux Toolkit
+- **Routing**: React Router
+- **UI Components**: Headless UI, React Icons, Lucide React
+- **Animations**: Framer Motion, Lottie
+- **Data Handling**: Axios for API requests, Day.js for date manipulation
+- **Drag and Drop**: React Beautiful DnD, React DnD
+- **Layout**: React Grid Layout, React Resizable, React Resizable Panels
+- **Machine Learning**: TensorFlow.js, Synaptic
+- **Notifications**: React Toastify
+- **Build Tools**: React Scripts, Babel, PostCSS, Autoprefixer
 
 ### Planned Features
-- Advanced organism customization with a wider range of cell types.
-- Machine learning integration for evolving AI behaviors.
-- More complex environments with dynamic hazards.
-- Leaderboards and achievements for competitive gameplay.
+- Advanced organism customization with a wider range of cell types
+- Machine learning integration for evolving AI behaviors
+- More complex environments with dynamic hazards
+- Leaderboards and achievements for competitive gameplay
+- Integration of Godot simulation engine for enhanced physics-based organism interactions and simulation logic
 
 ## Installation
 To get started with this project, follow the steps below:
