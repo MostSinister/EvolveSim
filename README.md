@@ -128,6 +128,7 @@ These machine learning integrations ensure that EvolveSim provides a rich, dynam
   - Navigation menu
 
 ### What's Next?
+- **Further UI improvement**: Including Persistent responsive UI layout.
 - **Working Organism Page**: Develop a dedicated page for viewing and managing individual organisms.
 - **Dynamic Dashboard Widgets**: Create customizable widgets for the dashboard to display relevant game information and statistics.
 - **Component Creation**: Implement the system for creating and managing different cell types and components for organisms.
