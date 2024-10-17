@@ -1,71 +1,94 @@
 // src/components/Organism.js
-import React, { useState } from 'react';
-import { Dna, Heart, Zap, Brain } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import OrganismCard from './Cards/OrganismCard';
+import OrganismDetails from './OrganismDetails';
+import CreateOrganismCard from './CreateOrganismCard';
+import FullScreenOrganism from './FullScreenOrganism';
+import bacteriaAnimation1 from '../assets/anims/Bacteria1-lottie.json';
+import bacteriaAnimation2 from '../assets/anims/Bacteria2-lottie.json';
+import bacteriaAnimation3 from '../assets/anims/Bacteria3-lottie.json';
 
 const Organism = ({ isDarkMode }) => {
-  const [selectedOrganism, setSelectedOrganism] = useState(null);
+  const [organisms, setOrganisms] = useState([
+    { id: 1, name: "Blobulus Wigglius", title: "The Blob", fitness: 0.82, health: 90, energy: 75, intelligence: 60, animationData: bacteriaAnimation1, textColor: 'text-green-500' },
+    { id: 2, name: "Squigglius Jigglypuff", title: "The Squiggler", fitness: 0.65, health: 76, energy: 80, intelligence: 55, animationData: bacteriaAnimation2, textColor: 'text-blue-500' },
+    { id: 3, name: "Wobbletonium Giganticulus", title: "The Wobbler", fitness: 0.92, health: 85, energy: 70, intelligence: 75, animationData: bacteriaAnimation3, textColor: 'text-purple-500' },
+  ]);
+  const [selectedOrganism, setSelectedOrganism] = useState(organisms[0]);
+  const [fullScreenOrganism, setFullScreenOrganism] = useState(null);
 
-  const organisms = [
-    { id: 1, name: "Organism A", fitness: 0.82, health: 90, energy: 75, intelligence: 60 },
-    { id: 2, name: "Organism B", fitness: 0.65, health: 76, energy: 80, intelligence: 55 },
-    { id: 3, name: "Organism C", fitness: 0.92, health: 85, energy: 70, intelligence: 75 },
-  ];
+  useEffect(() => {
+    const savedOrder = localStorage.getItem('organismOrder');
+    if (savedOrder) {
+      setOrganisms(JSON.parse(savedOrder));
+    }
+  }, []);
 
-  const bgColor = isDarkMode ? 'bg-gray-900' : 'bg-gray-100';
-  const textColor = isDarkMode ? 'text-gray-100' : 'text-gray-800';
-  const cardBgColor = isDarkMode ? 'bg-gray-800' : 'bg-white';
-  const hoverColor = isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200';
-  const borderColor = isDarkMode ? 'border-gray-700' : 'border-gray-300';
+  const onDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const items = Array.from(organisms);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setOrganisms(items);
+    localStorage.setItem('organismOrder', JSON.stringify(items));
+  };
+
+  const handleOrganismHover = (organism) => {
+    setSelectedOrganism(organism);
+  };
+
+  const handleOrganismClick = (organism) => {
+    setFullScreenOrganism(organism);
+  };
+
+  if (fullScreenOrganism) {
+    return (
+      <FullScreenOrganism
+        organism={fullScreenOrganism}
+        isDarkMode={isDarkMode}
+        onClose={() => setFullScreenOrganism(null)}
+      />
+    );
+  }
 
   return (
-    <div className={`h-full p-6 ${bgColor} ${textColor}`}>
-      <h2 className="text-3xl font-bold mb-6">Organism Viewer</h2>
-      <div className="flex space-x-6">
-        <div className={`w-1/3 ${cardBgColor} p-4 rounded-lg shadow-lg border ${borderColor}`}>
-          <h3 className="text-xl font-semibold mb-4">Organism List</h3>
-          <ul className="space-y-2">
-            {organisms.map((org) => (
-              <li 
-                key={org.id} 
-                className={`p-2 rounded cursor-pointer ${
-                  selectedOrganism === org 
-                    ? (isDarkMode ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-800') 
-                    : ''
-                } ${hoverColor}`}
-                onClick={() => setSelectedOrganism(org)}
-              >
-                {org.name}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className={`w-2/3 ${cardBgColor} p-4 rounded-lg shadow-lg border ${borderColor}`}>
-          {selectedOrganism ? (
-            <>
-              <h3 className="text-xl font-semibold mb-4">{selectedOrganism.name} Details</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center space-x-2">
-                  <Dna className={`w-6 h-6 ${textColor}`} />
-                  <span>Fitness: {selectedOrganism.fitness.toFixed(2)}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Heart className={`w-6 h-6 ${textColor}`} />
-                  <span>Health: {selectedOrganism.health}%</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Zap className={`w-6 h-6 ${textColor}`} />
-                  <span>Energy: {selectedOrganism.energy}%</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Brain className={`w-6 h-6 ${textColor}`} />
-                  <span>Intelligence: {selectedOrganism.intelligence}%</span>
-                </div>
+    <div className="flex h-full">
+      <div className="w-1/3 p-4 overflow-y-auto">
+        <CreateOrganismCard isDarkMode={isDarkMode} />
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="organisms">
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {organisms.map((organism, index) => (
+                  <Draggable key={organism.id} draggableId={organism.id.toString()} index={index}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                      >
+                        <OrganismCard
+                          organism={organism}
+                          isDarkMode={isDarkMode}
+                          onClick={handleOrganismClick}
+                          onHover={handleOrganismHover}
+                          isDraggable={true}
+                          dragHandleProps={provided.dragHandleProps}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
               </div>
-            </>
-          ) : (
-            <p className="text-center text-gray-500">Select an organism to view details</p>
-          )}
-        </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </div>
+      <div className="w-2/3 p-4">
+        <OrganismDetails organism={selectedOrganism} isDarkMode={isDarkMode} />
       </div>
     </div>
   );

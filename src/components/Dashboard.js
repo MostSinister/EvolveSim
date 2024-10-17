@@ -5,10 +5,11 @@ import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { fetchCollection } from '../firebaseService';
 import StatCard from './StatCard';
-import OrganismCard from './OrganismCard';
+import OrganismCard from './Cards/OrganismCard';
 import OrganismInfoCard from './OrganismInfoCard';
 import MessageCard from './MessageCard';
 import { cardConfig } from '../config/cardConfig';
+import FullScreenOrganism from './FullScreenOrganism';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -35,6 +36,8 @@ const Dashboard = ({ isDarkMode }) => {
   const [layout, setLayout] = useState(generateDefaultLayout);
 
   const [cards, setCards] = useState(cardConfig);
+
+  const [fullScreenOrganism, setFullScreenOrganism] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,6 +94,20 @@ const Dashboard = ({ isDarkMode }) => {
     setLayout(updatedLayout);
     localStorage.setItem('dashboardLayout', JSON.stringify(updatedLayout));
   };
+
+  const handleOrganismClick = (organism) => {
+    setFullScreenOrganism(organism);
+  };
+
+  if (fullScreenOrganism) {
+    return (
+      <FullScreenOrganism
+        organism={fullScreenOrganism}
+        isDarkMode={isDarkMode}
+        onClose={() => setFullScreenOrganism(null)}
+      />
+    );
+  }
 
   if (!layout || layout.length === 0) {
     return <div>Loading...</div>;
@@ -157,26 +174,14 @@ const Dashboard = ({ isDarkMode }) => {
               key={card.id} 
               className="no-select" 
               data-grid={layoutItem}
+              style={{ overflow: 'hidden' }}
             >
               {card.type === 'organism' ? (
-                card.id === 'Organism3' ? (
-                  <OrganismInfoCard
-                    isDarkMode={isDarkMode}
-                    animationData={card.animationData}
-                    name={card.name}
-                    description={card.description}
-                    textColor={card.textColor}
-                    stats={{ Speed: 'Moderate', Size: 'Gigantic', Intelligence: 'Prime' }}
-                  />
-                ) : (
-                  <OrganismCard
-                    isDarkMode={isDarkMode}
-                    animationData={card.animationData}
-                    name={card.name}
-                    description={card.description}
-                    textColor={card.textColor}
-                  />
-                )
+                <OrganismCard
+                  organism={card}
+                  isDarkMode={isDarkMode}
+                  onClick={handleOrganismClick}
+                />
               ) : card.type === 'message' ? (
                 <MessageCard isDarkMode={isDarkMode} />
               ) : (
