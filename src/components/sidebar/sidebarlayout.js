@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react'; // Icons for toggle
 import SidebarItems from './sidebaritems'; // Breakout menu items component
-import UserAvatar from '../UserAvatar';
+import UserAvatar from '../common/UserAvatar';
 
 // SidebarLayout component definition
 const SidebarLayout = ({ 

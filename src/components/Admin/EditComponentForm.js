@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Modal from './Modal';
-import fieldOrder from '../fieldOrder'; // Import the field order configuration
+import fieldOrder from '../../utils/fieldOrder'; // Corrected path
 
 function EditComponentForm({ componentType, componentData, isOpen, onClose, onSave }) {
   const [formData, setFormData] = useState({});

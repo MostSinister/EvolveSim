@@ -2,15 +2,15 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { PlusCircle, RefreshCw, Download, Upload } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { subscribeToCollection, deleteDocument, updateDocument, addDocument, exportCollectionToJSON, importCollectionFromJSON } from '../firebaseService';
-import NewComponentForm from './NewComponentForm';
-import EditComponentForm from './EditComponentForm';
-import biologicalStructure from '../Data/biological_components_structure.json';
-import componentCategories from '../Data/ComponentCategories.json';
-import { getFieldType, getStructure } from '../utils/structureParser';
-import ComponentTypeSelector from './ComponentTypeSelector';
-import ComponentTable from './ComponentTable';
-import ActionButtons from './ActionButtons';
+import { subscribeToCollection, deleteDocument, updateDocument, addDocument, exportCollectionToJSON, importCollectionFromJSON } from '../../firebaseService';
+import NewComponentForm from '../Admin/NewComponentForm';
+import EditComponentForm from '../Admin/EditComponentForm';
+import biologicalStructure from '../../Data/biological_components_structure.json';
+import componentCategories from '../../Data/ComponentCategories.json';
+import { getFieldType, getStructure } from '../../utils/structureParser';
+import ComponentTypeSelector from '../Admin/ComponentTypeSelector';
+import ComponentTable from '../Admin/ComponentTable';
+import ActionButtons from '../Admin/ActionButtons';
 
 // Function to format fields based on their type
 const formatField = (key, value, componentType) => {

@@ -1,6 +1,7 @@
 import React from 'react';
-import { signInWithGoogle } from '../utils/auth';
-import backgroundImage from '../assets/Images/petrydish.jpg';
+import { signInWithGoogle } from '../../utils/auth';
+// Update the path below to the correct location of petrydish.jpg
+import backgroundImage from '../../assets/Images/petrydish.jpg';
 
 const LoginPage = () => {
   return (

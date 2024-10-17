@@ -1,6 +1,7 @@
 import React from 'react';
 import Lottie from 'lottie-react';
-import DNAloader from '../assets/anims/DNAloader.json';
+// Update the path below to the correct location of DNAloader.json
+import DNAloader from '../../assets/anims/DNAloader.json';
 
 const MessageCard = ({ isDarkMode }) => {
   return (

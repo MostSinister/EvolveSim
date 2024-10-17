@@ -5,14 +5,14 @@
 import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import SidebarLayout from '../components/sidebar/sidebarlayout';
-import SimulationViewer from '../components/simulationviewer';
-import Dashboard from '../components/Dashboard';
-import Results from '../components/Results';
-import Settings from '../components/Settings';
-import Save from '../components/Save';
-import Logs from '../components/Logs';
-import Organism from '../components/Organism';
-import AdminPage from '../components/AdminPage';
+import SimulationViewer from '../components/pages/simulationviewer';
+import Dashboard from '../components/pages/Dashboard';
+import Results from '../components/pages/Results';
+import Settings from '../components/pages/Settings';
+import Save from '../components/pages/Save';
+import Logs from '../components/pages/Logs';
+import Organism from '../components/pages/Organism';
+import AdminPage from '../components/pages/AdminPage';
 
 const MainApp = ({ user, handleLogout }) => {
   // State for managing the active tab in the sidebar

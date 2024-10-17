@@ -3,13 +3,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import { fetchCollection } from '../firebaseService';
-import StatCard from './StatCard';
-import OrganismCard from './Cards/OrganismCard';
-import OrganismInfoCard from './OrganismInfoCard';
-import MessageCard from './MessageCard';
-import { cardConfig } from '../config/cardConfig';
-import FullScreenOrganism from './FullScreenOrganism';
+import { fetchCollection } from '../../firebaseService';
+import StatCard from '../Cards/StatCard';
+import OrganismCard from '../Cards/OrganismCard';
+import MessageCard from '../Cards/MessageCard';
+import { cardConfig } from '../../config/cardConfig';
+import FullScreenOrganism from '../common/FullScreenOrganism';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -34,9 +33,7 @@ const Dashboard = ({ isDarkMode }) => {
   }, []);
 
   const [layout, setLayout] = useState(generateDefaultLayout);
-
   const [cards, setCards] = useState(cardConfig);
-
   const [fullScreenOrganism, setFullScreenOrganism] = useState(null);
 
   useEffect(() => {
@@ -65,9 +62,13 @@ const Dashboard = ({ isDarkMode }) => {
   }, []);
 
   useEffect(() => {
-    // Ensure layout is updated when cardConfig changes
-    setLayout(generateDefaultLayout);
-  }, [cardConfig, generateDefaultLayout]);
+    const savedLayout = localStorage.getItem('dashboardLayout');
+    if (savedLayout) {
+      setLayout(JSON.parse(savedLayout));
+    } else {
+      setLayout(generateDefaultLayout);
+    }
+  }, [generateDefaultLayout]);
 
   const updateCardValues = (newCounts) => {
     setCards(prevCards => prevCards.map(card => ({
@@ -77,22 +78,8 @@ const Dashboard = ({ isDarkMode }) => {
   };
 
   const onLayoutChange = (newLayout) => {
-    const updatedLayout = newLayout.map(item => {
-      const card = cards.find(c => c.id === item.i);
-      if (!card) return item;
-
-      const isOrganism = card.type === 'organism';
-      const isMessage = card.type === 'message';
-      return {
-        ...item,
-        minW: isOrganism || isMessage ? 2 : 1,
-        minH: isOrganism || isMessage ? 2 : 1,
-        w: Math.max(item.w, isOrganism || isMessage ? 2 : 1),
-        h: Math.max(item.h, isOrganism || isMessage ? 2 : 1),
-      };
-    });
-    setLayout(updatedLayout);
-    localStorage.setItem('dashboardLayout', JSON.stringify(updatedLayout));
+    setLayout(newLayout);
+    localStorage.setItem('dashboardLayout', JSON.stringify(newLayout));
   };
 
   const handleOrganismClick = (organism) => {
@@ -166,35 +153,26 @@ const Dashboard = ({ isDarkMode }) => {
         preventCollision={false}
         margin={[10, 10]}
       >
-        {cards.map((card) => {
-          const layoutItem = layout.find(l => l.i === card.id);
-          if (!layoutItem) return null;
-          return (
-            <div 
-              key={card.id} 
-              className="no-select" 
-              data-grid={layoutItem}
-              style={{ overflow: 'hidden' }}
-            >
-              {card.type === 'organism' ? (
-                <OrganismCard
-                  organism={card}
-                  isDarkMode={isDarkMode}
-                  onClick={handleOrganismClick}
-                />
-              ) : card.type === 'message' ? (
-                <MessageCard isDarkMode={isDarkMode} />
-              ) : (
-                <StatCard
-                  title={card.title}
-                  value={card.value}
-                  color={card.color}
-                  isDarkMode={isDarkMode}
-                />
-              )}
-            </div>
-          );
-        })}
+        {cards.map((card) => (
+          <div key={card.id} className="no-select" style={{ overflow: 'hidden' }}>
+            {card.type === 'organism' ? (
+              <OrganismCard
+                organism={card}
+                isDarkMode={isDarkMode}
+                onClick={handleOrganismClick}
+              />
+            ) : card.type === 'message' ? (
+              <MessageCard isDarkMode={isDarkMode} />
+            ) : (
+              <StatCard
+                title={card.title}
+                value={card.value}
+                color={card.color}
+                isDarkMode={isDarkMode}
+              />
+            )}
+          </div>
+        ))}
       </ResponsiveGridLayout>
     </div>
   );

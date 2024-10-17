@@ -6,6 +6,12 @@ const FullScreenOrganism = ({ organism, isDarkMode, onClose }) => {
   const bgColor = isDarkMode ? 'bg-gray-900' : 'bg-white';
   const textColor = isDarkMode ? 'text-gray-100' : 'text-gray-800';
 
+  // Safely access numeric properties and provide default values
+  const fitness = organism.fitness !== undefined ? organism.fitness.toFixed(2) : 'N/A';
+  const health = organism.health !== undefined ? organism.health : 'N/A';
+  const energy = organism.energy !== undefined ? organism.energy : 'N/A';
+  const intelligence = organism.intelligence !== undefined ? organism.intelligence : 'N/A';
+
   return (
     <div className={`fixed inset-0 ${bgColor} ${textColor} p-8 z-50 overflow-auto`}>
       <button
@@ -19,10 +25,10 @@ const FullScreenOrganism = ({ organism, isDarkMode, onClose }) => {
         <h3 className="text-2xl mb-8">{organism.title}</h3>
         <div className="flex justify-between items-start mb-8">
           <div className="w-1/2">
-            <p>Fitness: {organism.fitness.toFixed(2)}</p>
-            <p>Health: {organism.health}%</p>
-            <p>Energy: {organism.energy}%</p>
-            <p>Intelligence: {organism.intelligence}%</p>
+            <p>Fitness: {fitness}</p>
+            <p>Health: {health}%</p>
+            <p>Energy: {energy}%</p>
+            <p>Intelligence: {intelligence}%</p>
           </div>
           <div className="w-1/2">
             <Lottie animationData={organism.animationData} loop={true} />

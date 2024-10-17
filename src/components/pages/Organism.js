@@ -1,13 +1,14 @@
-// src/components/Organism.js
+// src/components/pages/Organism.js
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import OrganismCard from './Cards/OrganismCard';
-import OrganismDetails from './OrganismDetails';
-import CreateOrganismCard from './CreateOrganismCard';
-import FullScreenOrganism from './FullScreenOrganism';
-import bacteriaAnimation1 from '../assets/anims/Bacteria1-lottie.json';
-import bacteriaAnimation2 from '../assets/anims/Bacteria2-lottie.json';
-import bacteriaAnimation3 from '../assets/anims/Bacteria3-lottie.json';
+import OrganismCard from '../Cards/OrganismCard';
+import OrganismDetails from '../Cards/OrganismDetails';
+import CreateOrganismCard from '../Cards/CreateOrganismCard'; // Updated path
+import FullScreenOrganism from '../common/FullScreenOrganism';
+import bacteriaAnimation1 from '../../assets/anims/Bacteria1-lottie.json';
+import bacteriaAnimation2 from '../../assets/anims/Bacteria2-lottie.json';
+import bacteriaAnimation3 from '../../assets/anims/Bacteria3-lottie.json';
+import { GripVertical } from 'lucide-react';
 
 const Organism = ({ isDarkMode }) => {
   const [organisms, setOrganisms] = useState([
@@ -17,6 +18,7 @@ const Organism = ({ isDarkMode }) => {
   ]);
   const [selectedOrganism, setSelectedOrganism] = useState(organisms[0]);
   const [fullScreenOrganism, setFullScreenOrganism] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     const savedOrder = localStorage.getItem('organismOrder');
@@ -24,6 +26,16 @@ const Organism = ({ isDarkMode }) => {
       setOrganisms(JSON.parse(savedOrder));
     }
   }, []);
+
+  const handleMouseDown = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = (organism) => {
+    if (!isDragging) {
+      setFullScreenOrganism(organism);
+    }
+  };
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -34,6 +46,10 @@ const Organism = ({ isDarkMode }) => {
 
     setOrganisms(items);
     localStorage.setItem('organismOrder', JSON.stringify(items));
+  };
+
+  const onDragStart = () => {
+    setIsDragging(true);
   };
 
   const handleOrganismHover = (organism) => {
@@ -64,19 +80,26 @@ const Organism = ({ isDarkMode }) => {
               <div {...provided.droppableProps} ref={provided.innerRef}>
                 {organisms.map((organism, index) => (
                   <Draggable key={organism.id} draggableId={organism.id.toString()} index={index}>
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
+                        className="relative mb-4"
                       >
-                        <OrganismCard
-                          organism={organism}
-                          isDarkMode={isDarkMode}
-                          onClick={handleOrganismClick}
-                          onHover={handleOrganismHover}
-                          isDraggable={true}
-                          dragHandleProps={provided.dragHandleProps}
-                        />
+                        <div
+                          {...provided.dragHandleProps}
+                          className="absolute left-0 top-0 bottom-0 w-8 flex items-center justify-center cursor-move z-10"
+                        >
+                          <GripVertical size={20} />
+                        </div>
+                        <div className="pl-8">
+                          <OrganismCard
+                            organism={organism}
+                            isDarkMode={isDarkMode}
+                            onHover={handleOrganismHover}
+                            onClick={() => !snapshot.isDragging && handleOrganismClick(organism)}
+                          />
+                        </div>
                       </div>
                     )}
                   </Draggable>

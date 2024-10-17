@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import Modal from './Modal';
-import fieldOrder from '../fieldOrder';
-import DynamicInput from './DynamicInput';
+import fieldOrder from '../../utils/fieldOrder'; // Corrected path
+import DynamicInput from '../common/DynamicInput';
 
 function NewComponentForm({ componentType, isOpen, onClose, onSave }) {
   const [formData, setFormData] = useState({});

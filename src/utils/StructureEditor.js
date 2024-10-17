@@ -3,7 +3,7 @@
 // It allows users to view and modify the structure in JSON format.
 
 import React, { useState, useEffect } from 'react';
-import { getStructure, updateStructure } from '../utils/structureParser';
+import { getStructure, updateStructure } from './structureParser';
 
 function StructureEditor() {
   // State to hold the current structure

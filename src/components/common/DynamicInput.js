@@ -1,5 +1,5 @@
 import React from 'react';
-import { getFieldType, getEnumOptions } from '../utils/structureParser'; // Import utility functions
+import { getFieldType, getEnumOptions } from '../../utils/structureParser'; // Corrected path
 
 // DynamicInput component definition
 function DynamicInput({ componentType, fieldName, value, onChange }) {

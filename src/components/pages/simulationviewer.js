@@ -2,11 +2,11 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Resizable } from 'react-resizable';
 import 'react-resizable/css/styles.css';
-import SimulationControls from './simulationcontrols';
-import ZoomControl from './zoomcontrol';
-import DesignerPanel from './designerpanel';
-import ResultsPanel from './resultspanel';
-import GridBackground from './GridBackground';
+import SimulationControls from '../SimulationPage/simulationcontrols';
+import ZoomControl from '../SimulationPage/zoomcontrol';
+import DesignerPanel from '../SimulationPage/designerpanel';
+import ResultsPanel from '../SimulationPage/resultspanel';
+import GridBackground from '../SimulationPage/GridBackground';
 
 // MovablePanel component for creating draggable and resizable panels
 const MovablePanel = ({ children, title, initialState, isDarkMode, onStateChange }) => {
